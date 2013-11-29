@@ -1,0 +1,11 @@
+the creator logs in.
+
+the creator sends json to firebase with tabletop.
+
+the viewer loads an iframe from the static site with d3 and wrapper code inside.
+
+encoded in an iframe data-attr is a firebase url.
+
+the wrapper code gets data from the firebase url and passes it into d3.
+
+the user sees a yolochart.
