@@ -139,24 +139,7 @@ var chartData = [{
   "rowNumber": 20
 }];
 
-//eliminates any rows that contain only falsey values
-function trimEmptyRows(input) {
-  return _.filter(input, function(a) {
-    return _.reduce(a, function(accumulator, value) {
-      if (accumulator || value) return true;
-      return false;
-    });
-  });
-}
 
-//compacts all arrays in array (one level)
-function innerCompact(input) {
-  var output = [];
-  _.forEach(input, function(row) {
-    output.push(_.compact(row));
-  });
-  return output;
-}
 
 
 function arrayToDoc(input) {
@@ -185,20 +168,41 @@ function arrayToDoc(input) {
 //  {day:2, type:'foo', num:'34'},
 //  {day:2, type:'bar', num:'21'}]
 
+//eliminates any rows that contain only falsey values
+function trimEmptyRows(input) {
+  return _.filter(input, function(a) {
+    return _.reduce(a, function(accumulator, value) {
+      if (accumulator || value) return true;
+      return false;
+    });
+  });
+}
+
+//compacts all arrays in array (one level)
+function innerCompact(input) {
+  var output = [];
+  _.forEach(input, function(row) {
+    output.push(_.compact(row));
+  });
+  return output;
+}
+
 function hotToD3(input) {
   //clean out empty columns and rows
   var clean = innerCompact(trimEmptyRows(input))
-      output = [],
+      //remove and store header row
       header = clean.splice(0, 1)[0],
-      x_axis_key = header.splice(0, 1)[0];
+      //remove and store x axis key
+      x_axis_key = header.splice(0, 1)[0],
+      output = [];
 
   _.forEach(clean, function(row, index){
     // get value of x-axis, per row
     var x_axis_value = row.splice(0, 1)[0];
 
     _.forEach(header, function(value, index){
-      var doc = {}
-      doc[x_axis_key] = x_axis_value
+      var doc = {};
+      doc[x_axis_key] = x_axis_value;
       // match given keyname from header to value from row
       doc['type'] = value;
       doc['num'] = row[index];
