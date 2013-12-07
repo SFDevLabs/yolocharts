@@ -1,50 +1,33 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <title>yolocharts</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./vendor/jquery.handsontable.full.css">
-</head>
+  <head>
+    <title>yolocharts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./vendor/jquery.handsontable.full.css">
+  </head>
 
-<body>
-  <div id="js-chart"></div>
-  <div style="width: 500px; height: 300px; overflow: auto;">
-    <div id="js-table"></div>
-  </div>
-
-  <button id="redraw">redraw</button>
-  <textarea id="js-embed"></textarea>
-
-
-  <script id="stacked_area_template" type="text/riot-template">
-    <div id="' + chartId + '">
-      <script src="http://d3js.org/d3.v3.min.js"></script>
-      <script src="http://dimplejs.org/dist/dimple.v1.1.2.min.js"></script>
-      <script>
-        var data = '{{ chartDataString }}';
-        var svg = dimple.newSvg("#{{ chartId }}", 590, 300);
-        var myChart = new dimple.chart(svg, data);
-        myChart.setBounds({{setBounds}});
-        var x = myChart.addCategoryAxis("x", "{{ xAxis }}");
-        myChart.addMeasureAxis("y", "{{ units }}");
-        myChart.addSeries("type", dimple.plot.area);
-        myChart.addLegend(60, 10, 500, 20, "right");
-        myChart.draw();
-      </script>
+  <body>
+    <div id="js-chart"></div>
+    <div style="width: 500px; height: 300px; overflow: auto;">
+      <div id="js-table"></div>
+      <input val="Thousands Sold" id="js-units"></input>
     </div>
-  </div>
+
+    <button id="redraw">redraw</button>
+    <textarea id="js-embed"></textarea>
 
 
-  <script src="https://code.jquery.com/jquery.js"></script>
-  <script src="./vendor/Handsontable.js"></script>
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="http://dimplejs.org/dist/dimple.v1.1.2.min.js"></script>
-  <script src="./vendor/lodash-compat.min.js"></script>
-  <script src="./vendor/riot.js"></script>
-  <script src="./vendor/render.js"></script>
-  <script src="./script.js"></script>
-  <!-- <script src="./scratchpad.js"></script> -->
-</body>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="./vendor/Handsontable.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://dimplejs.org/dist/dimple.v1.1.2.min.js"></script>
+    <script src="./vendor/lodash-compat.min.js"></script>
+    <script src="./vendor/riot.js"></script>
+    <script src="./vendor/render.js"></script>
+    <script src="./templates.js"></script>
+    <script src="./script.js"></script>
+    <!-- <script src="./scratchpad.js"></script> -->
+  </body>
 
 </html>
