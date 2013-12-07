@@ -11,14 +11,15 @@
 
 /*global $, _, console, templates*/
 
-var exampleData = [
-  ['Year', 'Maserati', 'Mazda', 'Mercedes', 'Mini', 'Mitsubishi'],
+var example = {
+  data:[['Year', 'Maserati', 'Mazda', 'Mercedes', 'Mini', 'Mitsubishi'],
   ['2009', '0', '2941', '4303', '354', '5814'],
   ['2010', '5', '2905', '2867', '412', '5284'],
   ['2011', '4', '2517', '4822', '552', '6127'],
   ['2012', '2', '2422', '5399', '776', '4151'],
-  [null, null, null, null, null, null]
-];
+  [null, null, null, null, null, null]],
+  y_axis_key: "Thousands Sold"
+};
 
 function generateUUID() {
     var d = new Date().getTime();
@@ -74,7 +75,7 @@ function hotToD3(input, y_axis_key) {
       doc[x_axis_key] = x_axis_value;
       // since we removed the x-axis before, all other columns are assumed to be seperate series,
       // so we set 'series' as the label for that column from the header
-      doc['series'] = value;
+      doc.series = value;
       // get the value from the row, and put it in the field corresponding to the units the user has chosen
       doc[y_axis_key] = row[index];
       output.data.push(doc);
@@ -92,13 +93,13 @@ function Table(opts) {
 
   self.draw = function(data) {
     self.opts.table_box.handsontable({
-      data: data,
+      data: example.data,
       minSpareCols: 1,
       minSpareRows: 1,
       rowHeaders: false,
       colHeaders: false,
       contextMenu: true,
-      afterChange: function() {
+      afterRender: function() {
         self.trigger('updated', self.getData());
       }
     });
@@ -108,7 +109,7 @@ function Table(opts) {
     var instance = self.opts.table_box.handsontable('getInstance');
     return {
       table_data: instance.getData(),
-      y_axis_key: self.opts.units_field.val()
+      y_axis_key: self.opts.y_axis_key.val()
     };
   };
 }
@@ -120,6 +121,7 @@ function Chart(opts) {
   self.settings = opts;
 
   self.draw = function(opts) {
+    console.log(opts);
     var conversion = hotToD3(opts.table_data, opts.y_axis_key),
         template_vars = {
           chart_data: JSON.stringify(conversion.data),
@@ -127,12 +129,8 @@ function Chart(opts) {
           x_axis_key: conversion.x_axis_key,
           y_axis_key: conversion.y_axis_key
         };
-
-    // template_vars.chart_data = JSON.stringify(hotToD3(opts.table_data, opts.y_axis_key));
     
     var rendered = $.render(self.settings.template, template_vars);
-
-    console.log(template_vars, rendered);
 
     self.settings.chart_box.html(rendered);
     self.settings.embed_box.text(rendered);
@@ -144,7 +142,7 @@ function initEditor(hash) {
   // initialize table with its elements
   var table = new Table({
     table_box: $('#js-table'),
-    units_field: $('#js-units')
+    y_axis_key: $('#js-units')
   });
 
   // initialize chart with its elements
@@ -154,13 +152,14 @@ function initEditor(hash) {
     embed_box: $('#js-embed')
   });
 
-  // draw table with example data
-  table.draw(exampleData);
-  
   // when table is updated, draw the chart with the right data
   table.on('updated', function(opts){
     chart.draw(opts);
   });
+
+  // draw table with example data
+  table.draw(example);
+  
 }
 
 
