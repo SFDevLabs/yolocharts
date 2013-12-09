@@ -158,6 +158,11 @@ function initEditor(hash) {
   }, 300);
 
   $('#js-table-settings').on('keyup', keypress);
+
+  $('#js-save-svg').on('click', function() {
+    crowbar();
+  });
+
   // when table is updated, draw the chart with the right data
   table.on('updated', function(opts){
     chart.draw(opts);
