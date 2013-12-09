@@ -1,0 +1,1 @@
+coffee --watch --bare --compile templates.coffee & stylus -w css/style.styl 
