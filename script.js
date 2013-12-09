@@ -91,7 +91,7 @@ function Table(opts) {
 
   self.opts = opts;
 
-  self.draw = function(data) {
+  self.draw = function(example) {
     self.opts.table_box.handsontable({
       data: example.data,
       minSpareCols: 1,
@@ -123,12 +123,12 @@ function Chart(opts) {
   self.draw = function(opts) {
     console.log(opts);
     var conversion = hotToD3(opts.table_data, opts.y_axis_key),
-        template_vars = {
-          chart_data: JSON.stringify(conversion.data),
-          chart_id: 'chartable-' + generateUUID(),
-          x_axis_key: conversion.x_axis_key,
-          y_axis_key: conversion.y_axis_key
-        };
+      template_vars = {
+        chart_data: JSON.stringify(conversion.data),
+        chart_id: 'chartable-' + generateUUID(),
+        x_axis_key: conversion.x_axis_key,
+        y_axis_key: conversion.y_axis_key
+      };
     
     var rendered = $.render(self.settings.template, template_vars);
 
