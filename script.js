@@ -152,6 +152,12 @@ function initEditor(hash) {
     embed_box: $('#js-embed')
   });
 
+  // debounced keypress
+  var keypress = _.debounce(function(){
+    table.trigger('updated', table.getData());
+  }, 300);
+
+  $('#js-table-settings').on('keyup', keypress);
   // when table is updated, draw the chart with the right data
   table.on('updated', function(opts){
     chart.draw(opts);
