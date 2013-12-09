@@ -7,7 +7,7 @@ templates =
       <script src="http://d3js.org/d3.v3.min.js"></script>
       <script src="http://dimplejs.org/dist/dimple.v1.1.2.min.js"></script>
       <script>
-        var svg = dimple.newSvg("#{{ chart_id }}", "100%", "100%");
+        var svg = dimple.newSvg("#{{ chart_id }}", "100%", "500px");
         var myChart = new dimple.chart(svg, {{ chart_data }});
         myChart.setMargins("60px", "60px", "40px", "40px");
         var x = myChart.addCategoryAxis("x", "{{ x_axis_key }}");
