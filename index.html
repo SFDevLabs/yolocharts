@@ -5,20 +5,44 @@
     <title>yolocharts</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./vendor/jquery.handsontable.full.css">
+    <link rel="stylesheet" href="./css/style.css">
   </head>
 
   <body>
-    <div id="js-chart"></div>
-    <div style="width: 500px; height: 300px; overflow: auto;">
-      <div id="js-table"></div>
-      <div id="js-table-settings">
-        <input value="Thousands Sold" id="js-units"></input>
+    <div class="container text-center">
+      <h1>Chartable</h1>
+      <hr/>
+      <div id="js-chart" class="chartbox inline-block"></div>
+      <hr/>
+      <div class="inline-block tablebox js-jankytable">
+        <div id="js-table" class="hot-table"></div>
+        <form id="js-table-settings" class="form-inline table-settings" role="form">
+          <div class="form-group">
+            <label class="y-axis-key-label" for="y-axis-key">y-axis</label>
+            <input type="text" class="fake-table-form" id="js-y-axis-key">
+          </div>
+        </form>
       </div>
+      <hr/> 
+      <button class="btn btn-primary btn-lg" id="js-save-svg">Save svg</button>
+      <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#js-embed-modal">Get embed code</button>
+      <hr />
     </div>
 
-    <button id="js-save-svg">save svg</button>
-    <textarea id="js-embed"></textarea>
-
+    <!-- Modal -->
+    <div class="modal fade" id="js-embed-modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Embed code</h4>
+          </div>
+          <div class="modal-body">
+            <textarea class="form-control" id="js-embed" rows="10"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="./vendor/Handsontable.js"></script>
@@ -27,6 +51,7 @@
     <script src="./vendor/lodash-compat.min.js"></script>
     <script src="./vendor/riot.js"></script>
     <script src="./vendor/render.js"></script>
+    <script src="./vendor/bootstrap.min.js"></script>
     <script src="./vendor/crowbar.js"></script>
 
     <script src="./templates.js"></script>

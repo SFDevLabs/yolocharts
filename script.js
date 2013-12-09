@@ -92,17 +92,28 @@ function Table(opts) {
   self.opts = opts;
 
   self.draw = function(example) {
+    // Loads the example y axis key into the field
+    self.opts.y_axis_key.val(example.y_axis_key);
+    
     self.opts.table_box.handsontable({
       data: example.data,
+      // minCols: 20,
       minSpareCols: 1,
       minSpareRows: 1,
       rowHeaders: false,
       colHeaders: false,
       contextMenu: true,
-      afterRender: function() {
+      nativeScrollbars: true,
+      afterInit: function() {
         self.trigger('updated', self.getData());
+        jankyTable();
+      },
+      afterChange: function() {
+        self.trigger('updated', self.getData());
+        jankyTable();
       }
     });
+
   };
 
   self.getData = function() {
@@ -112,6 +123,11 @@ function Table(opts) {
       y_axis_key: self.opts.y_axis_key.val()
     };
   };
+}
+
+// Janky hack to allow the bloated handsontable.js to be centered
+function jankyTable() {
+  $('.js-jankytable').width($('.htCore').width());
 }
 
 
@@ -142,7 +158,7 @@ function initEditor(hash) {
   // initialize table with its elements
   var table = new Table({
     table_box: $('#js-table'),
-    y_axis_key: $('#js-units')
+    y_axis_key: $('#js-y-axis-key')
   });
 
   // initialize chart with its elements
@@ -159,6 +175,8 @@ function initEditor(hash) {
 
   $('#js-table-settings').on('keyup', keypress);
 
+
+  //Simply calls crowbar.js. Janky hack for now, but kinda works. Need to fix Illustrator bugs
   $('#js-save-svg').on('click', function() {
     crowbar();
   });
@@ -171,6 +189,7 @@ function initEditor(hash) {
   // draw table with example data
   table.draw(example);
   
+
 }
 
 
