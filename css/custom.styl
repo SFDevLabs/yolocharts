@@ -1,0 +1,78 @@
+*
+  outline none !important
+
+body
+ background #EEE
+
+.inline-block
+  display inline-block
+
+.chartbox
+  padding 10px
+  background white
+  max-width 960px
+  width 100%
+
+.tablebox
+  padding 20px
+  background white
+  margin-right auto
+  margin-left auto
+  width 960px
+  #js-table
+    overflow auto
+
+.fake-table-form
+  border 1px solid #ccc
+  border-radius 0px
+  padding 2px 8px
+  &:active, &:focus
+    border 2px solid #5292F7
+
+
+.table-settings
+  text-align left
+
+.y-axis-key-label
+  z-index 1
+  position relative
+  background #ccc
+  font-size $font-size-large
+  font-weight 400
+  padding 2.5px 5px
+  margin-right 10px
+  &:before
+    z-index -1
+    content ""
+    background #ccc
+    width 10px
+    height 10px
+    position absolute
+    rotate(45deg)
+    bottom 4px
+    right -4px
+
+.hot-table
+  position relative
+  margin-bottom 30px
+  margin-top 50px
+  tr:first-of-type
+    td:first-of-type
+      &:before
+        content ""
+        background #ccc
+        width 10px
+        height 10px
+        position absolute
+        rotate(45deg)
+        top -25px
+        left 5px
+      &:after
+        background #ccc
+        font-size $font-size-large
+        padding 2.5px 5px
+        content "x-axis"
+        position absolute
+        top -45px
+        left 0
+  
