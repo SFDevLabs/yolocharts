@@ -1,6 +1,8 @@
+# View this with html syntax highlighting!
+
 templates =
   
-  stacked_area:
+  simple_chart:
 
     '''
     <div id="{{ chart_id }}">
@@ -10,9 +12,11 @@ templates =
         var svg = dimple.newSvg("#{{ chart_id }}", "100%", "500px");
         var myChart = new dimple.chart(svg, {{ chart_data }});
         myChart.setMargins("60px", "60px", "40px", "40px");
-        var x = myChart.addCategoryAxis("x", "{{ x_axis_key }}");
+
+        myChart.addCategoryAxis("x", "{{ x_axis_key }}");
         myChart.addMeasureAxis("y", "{{ y_axis_key }}");
-        myChart.addSeries("series", dimple.plot.area);
+
+        myChart.addSeries("series", dimple.plot.{{ chart_type }});
         myChart.addLegend(20, 20, 1000, 10, "left");
         //timeout to make sure it picks up the right dimensions
         setTimeout(function(){ myChart.draw() }, 10);
@@ -23,3 +27,7 @@ templates =
       </script>
     </div>
     '''
+
+
+# var x = myChart.addCategoryAxis("x", "{{ x_axis_key }}");
+# myChart.addMeasureAxis("y", "{{ y_axis_key }}");

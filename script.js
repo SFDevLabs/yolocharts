@@ -116,6 +116,7 @@ function Table(opts) {
 
   };
 
+  // Gets data from both the table and the settings form(s)
   self.getData = function() {
     var instance = self.opts.table_box.handsontable('getInstance');
     return {
@@ -131,19 +132,21 @@ function jankyTable() {
 }
 
 
-function Chart(opts) {
+function Chart(settings) {
   var self = $.observable(this);
 
-  self.settings = opts;
+  self.settings = settings;
 
   self.draw = function(opts) {
     console.log(opts);
+    // Processes the data for d3
     var conversion = hotToD3(opts.table_data, opts.y_axis_key),
       template_vars = {
         chart_data: JSON.stringify(conversion.data),
         chart_id: 'chartable-' + generateUUID(),
         x_axis_key: conversion.x_axis_key,
-        y_axis_key: conversion.y_axis_key
+        y_axis_key: conversion.y_axis_key,
+        chart_type: self.settings.chart_type
       };
     
     var rendered = $.render(self.settings.template, template_vars);
@@ -155,6 +158,8 @@ function Chart(opts) {
 
 
 function initEditor(hash) {
+  var trim_hash = hash.slice(1)
+
   // initialize table with its elements
   var table = new Table({
     table_box: $('#js-table'),
@@ -163,9 +168,10 @@ function initEditor(hash) {
 
   // initialize chart with its elements
   var chart = new Chart({
-    template: templates.stacked_area,
+    template: templates.simple_chart,
     chart_box: $('#js-chart'),
-    embed_box: $('#js-embed')
+    embed_box: $('#js-embed'),
+    chart_type: trim_hash
   });
 
   // debounced keypress
