@@ -86,16 +86,16 @@ function hotToD3(input, y_axis_key) {
 }
 
 
-function Table(opts) {
+function Table(settings) {
   var self = $.observable(this);
 
-  self.opts = opts;
+  self.settings = settings;
 
   self.draw = function(example) {
     // Loads the example y axis key into the field
-    self.opts.y_axis_key.val(example.y_axis_key);
+    self.settings.y_axis_key.val(example.y_axis_key);
     
-    self.opts.table_box.handsontable({
+    self.settings.table_box.handsontable({
       data: example.data,
       // minCols: 20,
       minSpareCols: 1,
@@ -118,10 +118,10 @@ function Table(opts) {
 
   // Gets data from both the table and the settings form(s)
   self.getData = function() {
-    var instance = self.opts.table_box.handsontable('getInstance');
+    var instance = self.settings.table_box.handsontable('getInstance');
     return {
       table_data: instance.getData(),
-      y_axis_key: self.opts.y_axis_key.val()
+      y_axis_key: self.settings.y_axis_key.val()
     };
   };
 }
@@ -137,7 +137,7 @@ function Chart(settings) {
 
   self.settings = settings;
 
-  self.draw = function(opts) {
+  self.render = function(opts) {
     console.log(opts);
     // Processes the data for d3
     var conversion = hotToD3(opts.table_data, opts.y_axis_key),
@@ -149,16 +149,17 @@ function Chart(settings) {
         chart_type: self.settings.chart_type
       };
     
-    var rendered = $.render(self.settings.template, template_vars);
+    return $.render(self.settings.template, template_vars);
 
-    self.settings.chart_box.html(rendered);
-    self.settings.embed_box.text(rendered);
   };
 }
 
 
 function initEditor(hash) {
-  var trim_hash = hash.slice(1)
+  var trim_hash = hash.slice(1);
+
+  var chart_box = $('#js-chart'),
+      embed_box = $('#js-embed');
 
   // initialize table with its elements
   var table = new Table({
@@ -169,8 +170,6 @@ function initEditor(hash) {
   // initialize chart with its elements
   var chart = new Chart({
     template: templates.simple_chart,
-    chart_box: $('#js-chart'),
-    embed_box: $('#js-embed'),
     chart_type: trim_hash
   });
 
@@ -182,14 +181,17 @@ function initEditor(hash) {
   $('#js-table-settings').on('keyup', keypress);
 
 
-  //Simply calls crowbar.js. Janky hack for now, but kinda works. Need to fix Illustrator bugs
+  //Simply calls crowbar.js. Janky hack for now, but works. Need to fix Illustrator bugs
   $('#js-save-svg').on('click', function() {
     crowbar();
   });
 
   // when table is updated, draw the chart with the right data
   table.on('updated', function(opts){
-    chart.draw(opts);
+    var rendered = chart.render(opts);
+
+    chart_box.html(rendered);
+    embed_box.text(rendered);
   });
 
   // draw table with example data
