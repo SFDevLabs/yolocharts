@@ -18,7 +18,7 @@ var example = {
   ['2011', '4', '2517', '4822', '552', '6127'],
   ['2012', '2', '2422', '5399', '776', '4151'],
   [null, null, null, null, null, null]],
-  y_axis_key: "Thousands Sold"
+  y_axis_key: 'Thousands Sold'
 };
 
 function generateUUID() {
@@ -113,7 +113,6 @@ function Table(settings) {
         jankyTable();
       }
     });
-
   };
 
   // Gets data from both the table and the settings form(s)
@@ -132,31 +131,26 @@ function jankyTable() {
 }
 
 
-function Chart(settings) {
+function Chart() {
   var self = $.observable(this);
 
-  self.settings = settings;
-
-  self.render = function(opts) {
-    console.log(opts);
+  self.render = function(chart_type) {
+    console.log(self.data);
     // Processes the data for d3
-    var conversion = hotToD3(opts.table_data, opts.y_axis_key),
+    var conversion = hotToD3(self.data.table_data, self.data.y_axis_key),
       template_vars = {
         chart_data: JSON.stringify(conversion.data),
         chart_id: 'chartable-' + generateUUID(),
         x_axis_key: conversion.x_axis_key,
-        y_axis_key: conversion.y_axis_key,
-        chart_type: self.settings.chart_type
+        y_axis_key: conversion.y_axis_key
       };
     
-    return $.render(self.settings.template, template_vars);
-
+    return $.render(templates[chart_type], template_vars);
   };
 }
 
 
 function initEditor(hash) {
-  var trim_hash = hash.slice(1);
 
   var chart_box = $('#js-chart'),
       embed_box = $('#js-embed');
@@ -168,10 +162,7 @@ function initEditor(hash) {
   });
 
   // initialize chart with its elements
-  var chart = new Chart({
-    template: templates.simple_chart,
-    chart_type: trim_hash
-  });
+  var chart = new Chart();
 
   // debounced keypress
   var keypress = _.debounce(function(){
@@ -187,8 +178,10 @@ function initEditor(hash) {
   });
 
   // when table is updated, draw the chart with the right data
-  table.on('updated', function(opts){
-    var rendered = chart.render(opts);
+  table.on('updated', function(data){
+    chart.data = data;
+
+    var rendered = chart.render('simple_line');
 
     chart_box.html(rendered);
     embed_box.text(rendered);
@@ -196,11 +189,10 @@ function initEditor(hash) {
 
   // draw table with example data
   table.draw(example);
-  
-
 }
 
 
 $.route(function(hash) {
-  initEditor(hash);
+  var trim_hash = hash.slice(1);
+  initEditor(trim_hash);
 });
