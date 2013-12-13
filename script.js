@@ -1,26 +1,46 @@
 'use strict';
 
-//future db schema
-//chart_id: {
-//  chartData: [...],
-//  units: "",
-//  chart_type: ""
-//}
-//
-//
-
 /*global $, _, console, templates*/
 
-var example = {
-  data:[['Year', 'Maserati', 'Mazda', 'Mercedes', 'Mini', 'Mitsubishi'],
-  ['2009', '0', '2941', '4303', '354', '5814'],
-  ['2010', '5', '2905', '2867', '412', '5284'],
-  ['2011', '4', '2517', '4822', '552', '6127'],
-  ['2012', '2', '2422', '5399', '776', '4151'],
-  [null, null, null, null, null, null]],
-  y_axis_key: 'Thousands Sold'
-};
 
+
+function Oroborus(array, index) {
+  var self = this;
+  // What index is the Oroborus at?
+  self.index = index;
+  self.array = array;
+  
+  // Oroborus.walk() accepts a positive or negative integer and increments and decrements the index accordingly.
+  // The incrementing and decrementing wrap around, so that the array is circular.
+  // It returns the element of `array` at the new `index`
+  // If the `skip` arg is true, the `index` is not altered.
+  self.walk = function(num, skip) {
+
+    // Set `temp` counter to keep from altering the `index` if desired
+    var temp = self.index;
+    // Repeat the absolute number of times
+    for (var i = 0; i < Math.abs(num); i++) {
+
+      // If num is positive, increment each time or go back to zero
+      if (num > 0) self.array[++temp] || self.array[(temp = 0)]; // Sorry, Crockford
+      // If num is negative, decrement each time or go to end of array
+      if (num < 0) self.array[--temp] || self.array[(temp = self.array.length - 1)];
+    }
+
+    // If `skip` argument is false, change `index`
+    if (!skip) self.index = temp;
+    return self.array[temp];
+  };
+
+  // Convenience function
+  self.seek = function(move, skip) {
+    self.walk(move);
+    return self.walk(skip, true);
+  };
+}
+
+
+// This generates a unique ID. Got it off stackoverflow.
 function generateUUID() {
     var d = new Date().getTime();
     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -86,56 +106,30 @@ function hotToD3(input, y_axis_key) {
 }
 
 
-function Table(settings) {
+
+
+function Table(data, y_axis_key) {
   var self = $.observable(this);
 
-  self.settings = settings;
+  self.data = data;
+  self.y_axis_key = y_axis_key;
 
-  self.draw = function(example) {
-    // Loads the example y axis key into the field
-    self.settings.y_axis_key.val(example.y_axis_key);
-    
-    self.settings.table_box.handsontable({
-      data: example.data,
-      // minCols: 20,
-      minSpareCols: 1,
-      minSpareRows: 1,
-      rowHeaders: false,
-      colHeaders: false,
-      contextMenu: true,
-      nativeScrollbars: true,
-      afterInit: function() {
-        self.trigger('updated', self.getData());
-        jankyTable();
-      },
-      afterChange: function() {
-        self.trigger('updated', self.getData());
-        jankyTable();
-      }
-    });
-  };
-
-  // Gets data from both the table and the settings form(s)
-  self.getData = function() {
-    var instance = self.settings.table_box.handsontable('getInstance');
+  self.read = function() {
     return {
-      table_data: instance.getData(),
-      y_axis_key: self.settings.y_axis_key.val()
+      table_data: self.data,
+      y_axis_key: self.y_axis_key
     };
   };
 }
 
-// Janky hack to allow the bloated handsontable.js to be centered
-function jankyTable() {
-  $('.js-jankytable').width($('.htCore').width());
-}
 
+function Chart(types, chosen) {
+  var self = $.observable(this),
+      index = _.indexOf(types, chosen);
 
-function Chart() {
-  var self = $.observable(this);
+  self.types = new Oroborus(types, index);
 
   self.render = function(chart_type) {
-    console.log(self.data);
     // Processes the data for d3
     var conversion = hotToD3(self.data.table_data, self.data.y_axis_key),
       template_vars = {
@@ -150,49 +144,91 @@ function Chart() {
 }
 
 
-function initEditor(hash) {
 
-  var chart_box = $('#js-chart'),
-      embed_box = $('#js-embed');
+var table,
+    chart,
+    chart_types = _.keys(templates);
 
-  // initialize table with its elements
-  var table = new Table({
-    table_box: $('#js-table'),
-    y_axis_key: $('#js-y-axis-key')
+$.route(function(hash) {
+  var trim_hash = hash.slice(1),
+      chosen_template = templates[trim_hash];
+
+  table = new Table(chosen_template.data, chosen_template.y_axis_key);
+  chart = new Chart(chart_types, trim_hash);
+  tableBox($('#js-table-box'));
+  chartCarousel($('#js-chart-carousel'), $('#js-embed-box'));
+});
+
+
+
+tableBox = function($el) {
+  $('.js-y-axis-field', $el).on('keyup', function(){
+    table.y_axis_key = $(this).val()
+    table.trigger('updated', table.getData());
   });
 
-  // initialize chart with its elements
-  var chart = new Chart();
-
-  // debounced keypress
-  var keypress = _.debounce(function(){
-    table.trigger('updated', table.getData());
-  }, 300);
-
-  $('#js-table-settings').on('keyup', keypress);
-
-
   //Simply calls crowbar.js. Janky hack for now, but works. Need to fix Illustrator bugs
-  $('#js-save-svg').on('click', function() {
+  $('.js-save-svg', $el).on('click', function() {
     crowbar();
   });
 
-  // when table is updated, draw the chart with the right data
-  table.on('updated', function(data){
-    chart.data = data;
-
-    var rendered = chart.render('simple_line');
-
-    chart_box.html(rendered);
-    embed_box.text(rendered);
+  $('.js-table', $el).handsontable({
+    data: table.data,
+    // minCols: 20,
+    minSpareCols: 1,
+    minSpareRows: 1,
+    rowHeaders: false,
+    colHeaders: false,
+    contextMenu: true,
+    nativeScrollbars: true,
+    afterInit: function() {
+      table.trigger('updated', table.read());
+      jankyTable();
+    },
+    afterChange: function() {
+      table.trigger('updated', table.read());
+      jankyTable();
+    }
   });
 
-  // draw table with example data
-  table.draw(example);
-}
+  // Janky hack to allow the bloated handsontable.js to be centered
+  function jankyTable() {
+    $('.js-jankytable', $el).width($('.htCore', $el).width());
+  }
+};
 
 
-$.route(function(hash) {
-  var trim_hash = hash.slice(1);
-  initEditor(trim_hash);
-});
+
+chartCarousel = function($el, $embed_box) {
+  table.on('updated', function(data){
+    // Data must be loaded before any rendering can occur
+    chart.data = data;
+    draw();
+  });
+
+  $el.on('click', ':nth-child(2)', prepend);
+  $el.on('click', ':nth-child(4)', append);
+
+  function render(move, skip) {
+    return chart.render(chart.types.seek(move, skip));
+  }
+
+  function draw() {
+    $el.children(':nth-child(2)').html(render(0, -1));
+    $el.children(':nth-child(3)').html(render(0, 0));
+    $el.children(':nth-child(4)').html(render(0, 1));
+    $embed_box.text(render(0, 0));
+  }
+
+  function prepend() {
+    $el.prepend($el.children().last().empty());
+    $el.children(':nth-child(2)').html(render(-1, -1));
+    $embed_box.text(render(0, 0));
+  }
+
+  function append() {
+    $el.append($el.children().first().empty());
+    $el.children(':nth-child(4)').html(render(1, 1));
+    $embed_box.text(render(0, 0));
+  }
+};

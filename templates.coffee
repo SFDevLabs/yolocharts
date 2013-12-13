@@ -79,7 +79,3 @@ templates =
       </script>
     </div>
     '''
-
-
-# var x = myChart.addCategoryAxis("x", "{{ x_axis_key }}");
-# myChart.addMeasureAxis("y", "{{ y_axis_key }}");
