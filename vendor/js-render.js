@@ -1,6 +1,5 @@
 /*
-  Riot.js templating | moot.it/riotjs | license: MIT
-  (c) 2013 Tero Piirainen, Moot Inc and other contributors.
+  Riot js templating modified to work well for js code
  */
 (function() {
 
@@ -9,6 +8,7 @@
 
   // Render a template with data
   $.render = function(template, data) {
+    console.log(template, data)
     return !template ? '' : (FN[template] = FN[template] || new Function("_",
       "return '" + template
         .replace(/\n/g, "\\n")

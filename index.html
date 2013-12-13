@@ -11,20 +11,29 @@
   <body>
     <div class="container text-center">
       <h1>Chartable</h1>
+      
       <hr/>
-      <div id="js-chart" class="chartbox inline-block"></div>
+      <div id="js-chart-carousel" class="chart-carousel inline-block">
+        <div class="chart"></div>
+        <div class="chart"></div>
+        <div class="chart"></div>
+        <div class="chart"></div>
+        <div class="chart"></div>
+      </div>
       <hr/>
-      <div class="inline-block tablebox js-jankytable">
-        <div id="js-table" class="hot-table"></div>
+      
+      <div class="inline-block tablebox js-jankytable" id="js-table-box">
+        <div class="hot-table js-table"></div>
         <form id="js-table-settings" class="form-inline table-settings" role="form">
           <div class="form-group">
             <label class="y-axis-key-label" for="y-axis-key">y-axis</label>
-            <input type="text" class="fake-table-form" id="js-y-axis-key">
+            <input type="text" class="fake-table-form js-y-axis-key">
           </div>
         </form>
       </div>
+      
       <hr/> 
-      <button class="btn btn-primary btn-lg" id="js-save-svg">Save svg</button>
+      <button class="js-save-svg btn btn-primary btn-lg">Save svg</button>
       <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#js-embed-modal">Get embed code</button>
       <hr />
     </div>
@@ -38,7 +47,7 @@
             <h4 class="modal-title">Embed code</h4>
           </div>
           <div class="modal-body">
-            <textarea class="form-control" id="js-embed" rows="10"></textarea>
+            <textarea class="form-control js-embed-box" rows="10"></textarea>
           </div>
         </div>
       </div>
@@ -50,12 +59,15 @@
     <script src="http://dimplejs.org/dist/dimple.v1.1.2.min.js"></script>
     <script src="./vendor/lodash-compat.min.js"></script>
     <script src="./vendor/riot.js"></script>
-    <script src="./vendor/render.js"></script>
+    <script src="./vendor/js-render.js"></script>
     <script src="./vendor/bootstrap.min.js"></script>
     <script src="./vendor/crowbar.js"></script>
 
-    <script src="./templates.js"></script>
-    <script src="./script.js"></script>
+    <script src="./js/templates.js"></script>
+    <script src="./js/utilities.js"></script>
+    <script src="./js/models.js"></script>
+    <script src="./js/presenters.js"></script>
+    <script src="./js/router.js"></script>
     <!-- <script src="./scratchpad.js"></script> -->
   </body>
 

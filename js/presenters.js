@@ -1,7 +1,8 @@
 'use strict';
 /*global $, table, chart, crowbar*/
 
-tableBox = function($el) {
+
+var tableBox = function($el) {
   $('.js-y-axis-field', $el).on('keyup', function(){
     table.y_axis_key = $(this).val();
     table.trigger('updated', table.getData());
@@ -39,36 +40,37 @@ tableBox = function($el) {
 
 
 
-chartCarousel = function($el, $embed_box) {
+var chartCarousel = function($el, $embed_box) {
   table.on('updated', function(data){
     // Data must be loaded before any rendering can occur
-    chart.data = data;
+    chart.data.table_data = data.table_data;
+    chart.data.y_axis_key = data.y_axis_key;
     draw();
   });
 
-  $el.on('click', ':nth-child(2)', prepend);
-  $el.on('click', ':nth-child(4)', append);
+  $el.on('click', '*:nth-child(2)', prepend);
+  $el.on('click', '*:nth-child(4)', append);
 
   function render(move, skip) {
     return chart.render(chart.types.seek(move, skip));
   }
 
   function draw() {
-    $el.children(':nth-child(2)').html(render(0, -1));
-    $el.children(':nth-child(3)').html(render(0, 0));
-    $el.children(':nth-child(4)').html(render(0, 1));
+    $el.children('*:nth-child(2)').html(render(0, -1));
+    $el.children('*:nth-child(3)').html(render(0, 0));
+    $el.children('*:nth-child(4)').html(render(0, 1));
     $embed_box.text(render(0, 0));
   }
 
   function prepend() {
     $el.prepend($el.children().last().empty());
-    $el.children(':nth-child(2)').html(render(-1, -1));
+    $el.children('*:nth-child(2)').html(render(-1, -1));
     $embed_box.text(render(0, 0));
   }
 
   function append() {
     $el.append($el.children().first().empty());
-    $el.children(':nth-child(4)').html(render(1, 1));
+    $el.children('*:nth-child(4)').html(render(1, 1));
     $embed_box.text(render(0, 0));
   }
 };

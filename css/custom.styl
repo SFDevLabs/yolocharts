@@ -7,11 +7,51 @@ body
 .inline-block
   display inline-block
 
-.chartbox
-  padding 10px
-  background white
-  max-width 960px
-  width 100%
+// .chartbox
+//   padding 10px
+//   background white
+//   max-width 960px
+//   width 100%
+
+.chart-carousel
+  position relative
+  margin-left auto
+  margin-right auto
+
+  height 400px
+  width 700px
+  border 1px solid black
+
+.item
+  transition transform 500ms ease
+  font-size 70px
+  position absolute
+  top 20%
+  bottom 20%
+  left 20%
+  right 20%
+  background rgba(#bbb, .5)
+  border 1px solid black
+
+.item:nth-child(1) {
+  transform: scale(.5) translate(-1000px);
+}
+
+.item:nth-child(2) {
+  transform: scale(.5) translate(-400px);
+}
+
+.item:nth-child(3) {
+  z-index: 2;
+}
+
+.item:nth-child(4) {
+  transform: scale(.5) translate(400px);
+}
+
+.item:nth-child(5) {
+  transform: scale(.5) translate(1000px);
+}
 
 .tablebox
   padding 20px

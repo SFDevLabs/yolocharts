@@ -20,6 +20,7 @@ function Chart(types, chosen) {
   var self = $.observable(this),
       index = _.indexOf(types, chosen);
 
+  self.data = {};
   self.types = new utilities.Oroborus(types, index);
 
   self.render = function(chart_type) {
@@ -32,6 +33,6 @@ function Chart(types, chosen) {
         y_axis_key: conversion.y_axis_key
       };
     
-    return $.render(templates[chart_type], template_vars);
+    return $.render(templates[chart_type].template, template_vars);
   };
 }
