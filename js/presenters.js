@@ -52,28 +52,33 @@ var chartCarousel = function($el, $embed_box) {
   $el.on('click', '.item:nth-child(2)', prepend);
   $el.on('click', '.item:nth-child(4)', append);
 
-  function render(move, skip) {
-    console.log('render chart type: ', chart.types.seek(move, skip));
-    return chart.render(chart.types.seek(move, skip));
+  function render(num) {
+    return chart.render(chart.types.read(num));
   }
 
   function draw() {
-    $el.children('*:nth-child(2)').html(render(0, -1));
-    $el.children('*:nth-child(3)').html(render(0, 0));
-    $el.children('*:nth-child(4)').html(render(0, 1));
-    $embed_box.text(render(0, 0));
+    $el.children('.item:nth-child(2)').html(render(-1));
+    $el.children('.item:nth-child(3)').html(render(0));
+    $el.children('.item:nth-child(4)').html(render(1));
+    $embed_box.text(render(0));
     console.log('draw done')
   }
 
   function prepend() {
-    $el.prepend($el.children().last().empty());
-    $el.children('*:nth-child(2)').html(render(-1, -1));
-    $embed_box.text(render(0, 0));
+    $el.prepend($el.children('.item:nth-child(5)').empty());
+    console.log(chart.types.move(-1));
+    $el.children('.item:nth-child(2)').html(render(-1));
+    // $el.children('.item:nth-child(3)').html(render(0));
+    // $el.children('.item:nth-child(4)').html(render(1));
+    $embed_box.text(render(0));
   }
 
   function append() {
-    $el.append($el.children().first().empty());
-    $el.children('*:nth-child(4)').html(render(1, 1));
-    $embed_box.text(render(0, 0));
+    $el.append($el.children('.item:nth-child(1)').empty());
+    console.log(chart.types.move(1));
+    // $el.children('.item:nth-child(2)').html(render(-1));
+    // $el.children('.item:nth-child(3)').html(render(0));
+    $el.children('.item:nth-child(4)').html(render(1));
+    $embed_box.text(render(0));
   }
 };

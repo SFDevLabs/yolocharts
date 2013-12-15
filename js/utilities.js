@@ -32,9 +32,17 @@ var utilities = {
     };
 
     // Convenience function
-    self.seek = function(move, skip) {
+    self.seek = function (move, skip) {
       self.walk(move);
       return self.walk(skip, true);
+    };
+
+    self.move = function (num) {
+      return self.walk(num);
+    };
+
+    self.read = function (num) {
+      return self.walk(num, true);
     };
   },
 
