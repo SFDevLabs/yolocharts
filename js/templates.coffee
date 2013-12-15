@@ -11,7 +11,7 @@ templates =
         <script src="http://dimplejs.org/dist/dimple.v1.1.2.min.js"></script>
         <script>
           (function(){
-            var svg = dimple.newSvg("#{{ chart_id }}", "100%", "500px");
+            var svg = dimple.newSvg("#{{ chart_id }}", "100%", "100%");
             var myChart = new dimple.chart(svg, {{ chart_data }});
             myChart.setMargins("60px", "60px", "40px", "40px");
 
@@ -48,7 +48,7 @@ templates =
         <script src="http://dimplejs.org/dist/dimple.v1.1.2.min.js"></script>
         <script>
           (function(){
-            var svg = dimple.newSvg("#{{ chart_id }}", "100%", "500px");
+            var svg = dimple.newSvg("#{{ chart_id }}", "100%", "100%");
             var myChart = new dimple.chart(svg, {{ chart_data }});
             myChart.setMargins("60px", "60px", "40px", "40px");
 
@@ -85,7 +85,7 @@ templates =
         <script src="http://dimplejs.org/dist/dimple.v1.1.2.min.js"></script>
         <script>
           (function(){
-            var svg = dimple.newSvg("#{{ chart_id }}", "100%", "500px");
+            var svg = dimple.newSvg("#{{ chart_id }}", "100%", "100%");
             var myChart = new dimple.chart(svg, {{ chart_data }});
             myChart.setMargins("60px", "60px", "40px", "40px");
 

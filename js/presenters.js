@@ -58,21 +58,21 @@ var chartCarousel = function($el, $embed_box) {
   }
 
   function draw() {
-    $el.children('*:nth-child(2)').text(render(0, -1));
-    $el.children('*:nth-child(3)').text(render(0, 0));
-    $el.children('*:nth-child(4)').text(render(0, 1));
+    $el.children('*:nth-child(2)').html(render(0, -1));
+    $el.children('*:nth-child(3)').html(render(0, 0));
+    $el.children('*:nth-child(4)').html(render(0, 1));
     $embed_box.text(render(0, 0));
   }
 
   function prepend() {
     $el.prepend($el.children().last().empty());
-    $el.children('*:nth-child(2)').text(render(-1, -1));
+    $el.children('*:nth-child(2)').html(render(-1, -1));
     $embed_box.text(render(0, 0));
   }
 
   function append() {
     $el.append($el.children().first().empty());
-    $el.children('*:nth-child(4)').text(render(1, 1));
+    $el.children('*:nth-child(4)').html(render(1, 1));
     $embed_box.text(render(0, 0));
   }
 };
