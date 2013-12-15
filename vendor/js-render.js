@@ -8,7 +8,6 @@
 
   // Render a template with data
   $.render = function(template, data) {
-    console.log('render.js template, data: ', template, data)
     return !template ? '' : (FN[template] = FN[template] || new Function("_",
       "return '" + template
         .replace(/\n/g, "\\n")

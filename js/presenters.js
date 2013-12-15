@@ -41,16 +41,16 @@ var tableBox = function($el) {
 
 
 var chartCarousel = function($el, $embed_box) {
+  console.log('chart carousel presenter init')
   table.on('updated', function(data){
-    console.log('table on updated: ', data);
     // Data must be loaded before any rendering can occur
     chart.data.table_data = data.table_data;
     chart.data.y_axis_key = data.y_axis_key;
     draw();
   });
 
-  $el.on('click', '*:nth-child(2)', prepend);
-  $el.on('click', '*:nth-child(4)', append);
+  $el.on('click', '.item:nth-child(2)', prepend);
+  $el.on('click', '.item:nth-child(4)', append);
 
   function render(move, skip) {
     console.log('render chart type: ', chart.types.seek(move, skip));
@@ -62,6 +62,7 @@ var chartCarousel = function($el, $embed_box) {
     $el.children('*:nth-child(3)').html(render(0, 0));
     $el.children('*:nth-child(4)').html(render(0, 1));
     $embed_box.text(render(0, 0));
+    console.log('draw done')
   }
 
   function prepend() {
