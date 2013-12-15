@@ -4665,19 +4665,11 @@ body.modal-open,
   z-index: 1040;
 }
 .modal.fade .modal-dialog {
-  -webkit-transform: translate(0, -25%);
-  -ms-transform: translate(0, -25%);
-  transform: translate(0, -25%);
   -webkit-transition: -webkit-transform 0.3s ease-out;
   -moz-transition: -moz-transform 0.3s ease-out;
   -o-transition: -o-transform 0.3s ease-out;
   -webkit-transition: transform 0.3s ease-out;
   transition: transform 0.3s ease-out;
-}
-.modal.in .modal-dialog {
-  -webkit-transform: translate(0, 0);
-  -ms-transform: translate(0, 0);
-  transform: translate(0, 0);
 }
 .modal-dialog {
   margin-left: auto;
@@ -5711,11 +5703,51 @@ body {
 .inline-block {
   display: inline-block;
 }
-.chartbox {
-  padding: 10px;
-  background: #fff;
-  max-width: 960px;
-  width: 100%;
+.chart-carousel {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  height: 400px;
+  width: 700px;
+  border: 1px solid #000;
+}
+.item {
+  -webkit-transition: -webkit-transform 500ms ease;
+  -moz-transition: -moz-transform 500ms ease;
+  -o-transition: -o-transform 500ms ease;
+  -webkit-transition: transform 500ms ease;
+  transition: transform 500ms ease;
+  font-size: 7px;
+  position: absolute;
+  top: 20%;
+  bottom: 20%;
+  left: 20%;
+  right: 20%;
+  background: rgba(187,187,187,0.5);
+  border: 1px solid #000;
+}
+.item:nth-child(1) {
+  -webkit-transform: scale(0.5) translateX(-1000px);
+  -ms-transform: scale(0.5) translateX(-1000px);
+  transform: scale(0.5) translateX(-1000px);
+}
+.item:nth-child(2) {
+  -webkit-transform: scale(0.5) translateX(-400px);
+  -ms-transform: scale(0.5) translateX(-400px);
+  transform: scale(0.5) translateX(-400px);
+}
+.item:nth-child(3) {
+  z-index: 2;
+}
+.item:nth-child(4) {
+  -webkit-transform: scale(0.5) translateX(400px);
+  -ms-transform: scale(0.5) translateX(400px);
+  transform: scale(0.5) translateX(400px);
+}
+.item:nth-child(5) {
+  -webkit-transform: scale(0.5) translateX(1000px);
+  -ms-transform: scale(0.5) translateX(1000px);
+  transform: scale(0.5) translateX(1000px);
 }
 .tablebox {
   padding: 20px;
@@ -5757,6 +5789,8 @@ body {
   position: absolute;
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
   transform: rotate(45deg);
   bottom: 4px;
   right: -4px;
@@ -5772,6 +5806,8 @@ body {
   width: 10px;
   height: 10px;
   position: absolute;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);

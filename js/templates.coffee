@@ -5,6 +5,7 @@ templates =
   simple_line:
     template:
       '''
+      <!-- SIMPLE_LINE -->
       <div id="{{ chart_id }}">
         <script src="http://d3js.org/d3.v3.min.js"></script>
         <script src="http://dimplejs.org/dist/dimple.v1.1.2.min.js"></script>
@@ -41,6 +42,7 @@ templates =
   simple_bar:
     template:
       '''
+      <!-- SIMPLE_BAR -->
       <div id="{{ chart_id }}">
         <script src="http://d3js.org/d3.v3.min.js"></script>
         <script src="http://dimplejs.org/dist/dimple.v1.1.2.min.js"></script>
@@ -77,6 +79,7 @@ templates =
   simple_area:
     template:
       '''
+      <!-- SIMPLE_AREA -->
       <div id="{{ chart_id }}">
         <script src="http://d3js.org/d3.v3.min.js"></script>
         <script src="http://dimplejs.org/dist/dimple.v1.1.2.min.js"></script>
