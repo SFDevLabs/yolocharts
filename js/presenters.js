@@ -17,7 +17,7 @@ var tableBox = function($el) {
 
   $('.js-table', $el).handsontable({
     data: table.data,
-    minCols: 20,
+    minCols: 15,
     minSpareCols: 1,
     minSpareRows: 1,
     rowHeaders: false,
