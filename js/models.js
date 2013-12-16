@@ -8,10 +8,12 @@ function Table(data, y_axis_key) {
   self.y_axis_key = y_axis_key;
 
   self.read = function() {
-    return {
+    var ret = {
       table_data: self.data,
       y_axis_key: self.y_axis_key
     };
+    console.log('table.read', ret);
+    return ret;
   };
 }
 

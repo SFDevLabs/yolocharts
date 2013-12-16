@@ -22,10 +22,10 @@ var tableBox = function($el) {
     colHeaders: false,
     contextMenu: true,
     nativeScrollbars: true,
-    afterInit: function() {
-      table.trigger('updated', table.read());
-      jankyTable();
-    },
+    // afterInit: function() {
+    //   table.trigger('updated', table.read());
+    //   jankyTable();
+    // },
     afterChange: function() {
       table.trigger('updated', table.read());
       jankyTable();
@@ -34,6 +34,7 @@ var tableBox = function($el) {
 
   // Janky hack to allow the bloated handsontable.js to be centered
   function jankyTable() {
+    console.log('jankytable', $('.js-jankytable', $el));
     $('.js-jankytable', $el).width($('.htCore', $el).width());
   }
 };
@@ -41,8 +42,8 @@ var tableBox = function($el) {
 
 
 var chartCarousel = function($el, $embed_box) {
-  console.log('chart carousel presenter init')
   table.on('updated', function(data){
+    console.log('updated', data)
     // Data must be loaded before any rendering can occur
     chart.data.table_data = data.table_data;
     chart.data.y_axis_key = data.y_axis_key;

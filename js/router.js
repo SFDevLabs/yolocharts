@@ -11,6 +11,6 @@ $.route(function(hash) {
 
   table = new Table(chosen_template.data, chosen_template.y_axis_key);
   chart = new Chart(chart_types, trim_hash);
-  tableBox($('#js-table-box'));
   chartCarousel($('#js-chart-carousel'), $('#js-embed-box'));
+  tableBox($('#js-table-box'));
 });

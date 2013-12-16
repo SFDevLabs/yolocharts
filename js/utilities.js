@@ -30,15 +30,9 @@ var utilities = {
       if (!skip) self.index = temp;
       return self.array[temp];
     };
-
-    // Convenience function
-    self.seek = function (move, skip) {
-      self.walk(move);
-      return self.walk(skip, true);
-    };
-
+    
     self.move = function (num) {
-      return self.walk(num);
+      return self.walk(num, false);
     };
 
     self.read = function (num) {
