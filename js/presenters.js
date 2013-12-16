@@ -3,15 +3,17 @@
 
 
 var tableBox = function($el) {
-  $('.js-y-axis-field', $el).on('keyup', function(){
+  $('.js-y-axis-key').on('keyup', function(){
     table.y_axis_key = $(this).val();
-    table.trigger('updated', table.getData());
+    table.trigger('updated', table.read());
   });
 
   //Simply calls crowbar.js. Janky hack for now, but works. Need to fix Illustrator bugs
   $('.js-save-svg', $el).on('click', function() {
     crowbar();
   });
+
+  $('.js-y-axis-key').val(table.y_axis_key);
 
   $('.js-table', $el).handsontable({
     data: table.data,
@@ -34,8 +36,8 @@ var tableBox = function($el) {
 
   // Janky hack to allow the bloated handsontable.js to be centered
   function jankyTable() {
-    console.log('jankytable', $('.js-jankytable', $el));
-    $('.js-jankytable', $el).width($('.htCore', $el).width());
+    console.log('jankytable', $('.js-jankytable'));
+    $('.js-jankytable').width($('.htCore').width());
   }
 };
 

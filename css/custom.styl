@@ -17,29 +17,28 @@ body
   position relative
   margin-left auto
   margin-right auto
-
-  height 400px
-  width 700px
-  border 1px solid black
+  overflow hidden
+  height 500px
+  width 1000px
 
 
 .item
   transition-transform 500ms ease
   font-size 7px
   position absolute
-  top 20%
-  bottom 20%
-  left 20%
-  right 20%
-  background rgba(#bbb, .5)
-  border 1px solid black
+  top 0%
+  bottom 0%
+  left 10%
+  right 10%
+  background rgba(#fff, .9)
+
 
 .item:nth-child(1) {
-  transform: scale(.5) translateX(-1000px);
+  transform: scale(.5) translateX(-3000px);
 }
 
 .item:nth-child(2) {
-  transform: scale(.5) translateX(-400px);
+  transform: scale(.5) translateX(-70%);
 }
 
 .item:nth-child(3) {
@@ -47,11 +46,11 @@ body
 }
 
 .item:nth-child(4) {
-  transform: scale(.5) translateX(400px);
+  transform: scale(.5) translateX(70%);
 }
 
 .item:nth-child(5) {
-  transform: scale(.5) translateX(1000px);
+  transform: scale(.5) translateX(3000px);
 }
 
 .tablebox

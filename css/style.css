@@ -5707,9 +5707,9 @@ body {
   position: relative;
   margin-left: auto;
   margin-right: auto;
-  height: 400px;
-  width: 700px;
-  border: 1px solid #000;
+  overflow: hidden;
+  height: 500px;
+  width: 1000px;
 }
 .item {
   -webkit-transition: -webkit-transform 500ms ease;
@@ -5719,35 +5719,34 @@ body {
   transition: transform 500ms ease;
   font-size: 7px;
   position: absolute;
-  top: 20%;
-  bottom: 20%;
-  left: 20%;
-  right: 20%;
-  background: rgba(187,187,187,0.5);
-  border: 1px solid #000;
+  top: 0%;
+  bottom: 0%;
+  left: 10%;
+  right: 10%;
+  background: rgba(255,255,255,0.9);
 }
 .item:nth-child(1) {
-  -webkit-transform: scale(0.5) translateX(-1000px);
-  -ms-transform: scale(0.5) translateX(-1000px);
-  transform: scale(0.5) translateX(-1000px);
+  -webkit-transform: scale(0.5) translateX(-3000px);
+  -ms-transform: scale(0.5) translateX(-3000px);
+  transform: scale(0.5) translateX(-3000px);
 }
 .item:nth-child(2) {
-  -webkit-transform: scale(0.5) translateX(-400px);
-  -ms-transform: scale(0.5) translateX(-400px);
-  transform: scale(0.5) translateX(-400px);
+  -webkit-transform: scale(0.5) translateX(-70%);
+  -ms-transform: scale(0.5) translateX(-70%);
+  transform: scale(0.5) translateX(-70%);
 }
 .item:nth-child(3) {
   z-index: 2;
 }
 .item:nth-child(4) {
-  -webkit-transform: scale(0.5) translateX(400px);
-  -ms-transform: scale(0.5) translateX(400px);
-  transform: scale(0.5) translateX(400px);
+  -webkit-transform: scale(0.5) translateX(70%);
+  -ms-transform: scale(0.5) translateX(70%);
+  transform: scale(0.5) translateX(70%);
 }
 .item:nth-child(5) {
-  -webkit-transform: scale(0.5) translateX(1000px);
-  -ms-transform: scale(0.5) translateX(1000px);
-  transform: scale(0.5) translateX(1000px);
+  -webkit-transform: scale(0.5) translateX(3000px);
+  -ms-transform: scale(0.5) translateX(3000px);
+  transform: scale(0.5) translateX(3000px);
 }
 .tablebox {
   padding: 20px;
