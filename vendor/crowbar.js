@@ -26,13 +26,17 @@ function crowbar() {
         SVGSources.push(newSources[i]);
       };
     })
-    if (SVGSources.length > 1) {
-      createPopover(SVGSources);
-    } else if (SVGSources.length > 0) {
-      download(SVGSources[0]);
-    } else {
-      alert("The Crowbar couldn’t find any SVG nodes.");
-    }
+
+    //JANKY this always selects the center svg
+    download(SVGSources[1]);
+
+    // if (SVGSources.length > 1) {
+    //   createPopover(SVGSources);
+    // } else if (SVGSources.length > 0) {
+    //   download(SVGSources[0]);
+    // } else {
+    //   alert("The Crowbar couldn’t find any SVG nodes.");
+    // }
   }
 
   function createPopover(sources) {

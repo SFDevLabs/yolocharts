@@ -9,7 +9,7 @@ var tableBox = function($el) {
   });
 
   //Simply calls crowbar.js. Janky hack for now, but works. Need to fix Illustrator bugs
-  $('.js-save-svg', $el).on('click', function() {
+  $('.js-save-svg').on('click', function() {
     crowbar();
   });
 
@@ -17,7 +17,7 @@ var tableBox = function($el) {
 
   $('.js-table', $el).handsontable({
     data: table.data,
-    // minCols: 20,
+    minCols: 20,
     minSpareCols: 1,
     minSpareRows: 1,
     rowHeaders: false,
@@ -26,7 +26,7 @@ var tableBox = function($el) {
     nativeScrollbars: false,
     afterChange: function() {
       table.trigger('updated', table.read());
-      jankyTable();
+      // jankyTable();
     }
   });
 
@@ -64,20 +64,26 @@ var chartCarousel = function($el) {
   }
 
   function prepend() {
+    console.log('prepend')
     $el.prepend($el.children('.item:nth-child(5)').empty());
-    console.log(chart.types.move(-1));
+    chart.types.move(-1);
     $el.children('.item:nth-child(2)').html(render(-1));
     // $el.children('.item:nth-child(3)').html(render(0));
     // $el.children('.item:nth-child(4)').html(render(1));
     $('.js-embed-box').text(render(0));
+    chart.trigger('type_change', chart.types.read(0));
+    // window.location.hash = chart.types.read(0);
   }
 
   function append() {
+    console.log('append')
     $el.append($el.children('.item:nth-child(1)').empty());
-    console.log(chart.types.move(1));
+    chart.types.move(1);
     // $el.children('.item:nth-child(2)').html(render(-1));
     // $el.children('.item:nth-child(3)').html(render(0));
     $el.children('.item:nth-child(4)').html(render(1));
     $('.js-embed-box').text(render(0));
+    chart.trigger('type_change', chart.types.read(0));
+    // window.location.hash = chart.types.read(0);
   }
 };

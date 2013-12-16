@@ -18,8 +18,9 @@ body
   margin-left auto
   margin-right auto
   overflow hidden
-  height 500px
-  width 1000px
+  height 400px
+  width 100%
+  max-width 1200px
 
 
 .item
@@ -28,8 +29,8 @@ body
   position absolute
   top 0%
   bottom 0%
-  left 10%
-  right 10%
+  left 20%
+  right 20%
   background rgba(#fff, .9)
 
 
@@ -38,7 +39,7 @@ body
 }
 
 .item:nth-child(2) {
-  transform: scale(.5) translateX(-70%);
+  transform: scale(.5) translateX(-90%);
 }
 
 .item:nth-child(3) {
@@ -46,7 +47,7 @@ body
 }
 
 .item:nth-child(4) {
-  transform: scale(.5) translateX(70%);
+  transform: scale(.5) translateX(90%);
 }
 
 .item:nth-child(5) {
@@ -95,24 +96,20 @@ body
 .hot-table
   position relative
   margin-bottom 30px
-  margin-top 50px
-  tr:first-of-type
-    td:first-of-type
-      &:before
-        content ""
-        background #ccc
-        width 10px
-        height 10px
-        position absolute
-        rotate(45deg)
-        top -25px
-        left 5px
-      &:after
-        background #ccc
-        font-size $font-size-large
-        padding 2.5px 5px
-        content "x-axis"
-        position absolute
-        top -45px
-        left 0
+  margin-top 20px
+
+.x-axis-key-label
+  position relative
+  background #ccc
+  font-size $font-size-large
+  padding 2.5px 5px
+  &:before
+    content ""
+    background #ccc
+    width 10px
+    height 10px
+    position absolute
+    rotate(45deg)
+    bottom -4px
+    left 5px
   

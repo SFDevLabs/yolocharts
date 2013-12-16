@@ -5708,8 +5708,9 @@ body {
   margin-left: auto;
   margin-right: auto;
   overflow: hidden;
-  height: 500px;
-  width: 1000px;
+  height: 400px;
+  width: 100%;
+  max-width: 1200px;
 }
 .item {
   -webkit-transition: -webkit-transform 500ms ease;
@@ -5721,8 +5722,8 @@ body {
   position: absolute;
   top: 0%;
   bottom: 0%;
-  left: 10%;
-  right: 10%;
+  left: 20%;
+  right: 20%;
   background: rgba(255,255,255,0.9);
 }
 .item:nth-child(1) {
@@ -5731,17 +5732,17 @@ body {
   transform: scale(0.5) translateX(-3000px);
 }
 .item:nth-child(2) {
-  -webkit-transform: scale(0.5) translateX(-70%);
-  -ms-transform: scale(0.5) translateX(-70%);
-  transform: scale(0.5) translateX(-70%);
+  -webkit-transform: scale(0.5) translateX(-90%);
+  -ms-transform: scale(0.5) translateX(-90%);
+  transform: scale(0.5) translateX(-90%);
 }
 .item:nth-child(3) {
   z-index: 2;
 }
 .item:nth-child(4) {
-  -webkit-transform: scale(0.5) translateX(70%);
-  -ms-transform: scale(0.5) translateX(70%);
-  transform: scale(0.5) translateX(70%);
+  -webkit-transform: scale(0.5) translateX(90%);
+  -ms-transform: scale(0.5) translateX(90%);
+  transform: scale(0.5) translateX(90%);
 }
 .item:nth-child(5) {
   -webkit-transform: scale(0.5) translateX(3000px);
@@ -5797,9 +5798,15 @@ body {
 .hot-table {
   position: relative;
   margin-bottom: 30px;
-  margin-top: 50px;
+  margin-top: 20px;
 }
-.hot-table tr:first-of-type td:first-of-type:before {
+.x-axis-key-label {
+  position: relative;
+  background: #ccc;
+  font-size: 18px;
+  padding: 2.5px 5px;
+}
+.x-axis-key-label:before {
   content: "";
   background: #ccc;
   width: 10px;
@@ -5810,15 +5817,6 @@ body {
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
-  top: -25px;
+  bottom: -4px;
   left: 5px;
-}
-.hot-table tr:first-of-type td:first-of-type:after {
-  background: #ccc;
-  font-size: 18px;
-  padding: 2.5px 5px;
-  content: "x-axis";
-  position: absolute;
-  top: -45px;
-  left: 0;
 }
