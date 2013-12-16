@@ -23,11 +23,7 @@ var tableBox = function($el) {
     rowHeaders: false,
     colHeaders: false,
     contextMenu: true,
-    nativeScrollbars: true,
-    // afterInit: function() {
-    //   table.trigger('updated', table.read());
-    //   jankyTable();
-    // },
+    nativeScrollbars: false,
     afterChange: function() {
       table.trigger('updated', table.read());
       jankyTable();
@@ -43,7 +39,7 @@ var tableBox = function($el) {
 
 
 
-var chartCarousel = function($el, $embed_box) {
+var chartCarousel = function($el) {
   table.on('updated', function(data){
     console.log('updated', data)
     // Data must be loaded before any rendering can occur
@@ -63,7 +59,7 @@ var chartCarousel = function($el, $embed_box) {
     $el.children('.item:nth-child(2)').html(render(-1));
     $el.children('.item:nth-child(3)').html(render(0));
     $el.children('.item:nth-child(4)').html(render(1));
-    $embed_box.text(render(0));
+    $('.js-embed-box').text(render(0));
     console.log('draw done')
   }
 
@@ -73,7 +69,7 @@ var chartCarousel = function($el, $embed_box) {
     $el.children('.item:nth-child(2)').html(render(-1));
     // $el.children('.item:nth-child(3)').html(render(0));
     // $el.children('.item:nth-child(4)').html(render(1));
-    $embed_box.text(render(0));
+    $('.js-embed-box').text(render(0));
   }
 
   function append() {
@@ -82,6 +78,6 @@ var chartCarousel = function($el, $embed_box) {
     // $el.children('.item:nth-child(2)').html(render(-1));
     // $el.children('.item:nth-child(3)').html(render(0));
     $el.children('.item:nth-child(4)').html(render(1));
-    $embed_box.text(render(0));
+    $('.js-embed-box').text(render(0));
   }
 };
