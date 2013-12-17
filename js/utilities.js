@@ -36,7 +36,9 @@ var utilities = {
     };
 
     self.read = function (num) {
-      return self.walk(num, false);
+      var ret = self.walk(num, false);
+      console.log('read ret', ret)
+      return ret;
     };
   },
 

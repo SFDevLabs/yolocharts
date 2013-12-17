@@ -12,7 +12,7 @@ describe('The Chart model', function() {
   templates = [
     {
       name: 'test0',
-      template: '{{ chart_id }} {{ chart_data }} {{ x_axis_key }} {{ y_axis_key }}',
+      html: '{{ chart_id }} {{ chart_data }} {{ x_axis_key }} {{ y_axis_key }}',
       table_data: [
         ['x-axis', 'foo', 'bar'],
         ['2000', '23', '45'],
@@ -22,7 +22,7 @@ describe('The Chart model', function() {
     },
     {
       name: 'test1',
-      template: '{{ chart_id }} {{ chart_data }} {{ x_axis_key }} {{ y_axis_key }}',
+      html: '{{ chart_id }} {{ chart_data }} {{ x_axis_key }} {{ y_axis_key }}',
       table_data: [
         ['x-axis', 'foo', 'bar'],
         ['2000', '23', '45'],
@@ -32,7 +32,7 @@ describe('The Chart model', function() {
     },
     {
       name: 'test2',
-      template: '{{ chart_id }} {{ chart_data }} {{ x_axis_key }} {{ y_axis_key }}',
+      html: '{{ chart_id }} {{ chart_data }} {{ x_axis_key }} {{ y_axis_key }}',
       table_data: [
         ['x-axis', 'foo', 'bar'],
         ['2000', '23', '45'],
@@ -60,13 +60,14 @@ describe('The Chart model', function() {
   });
   
   it('loads and processes table data', function(){
-    chart.load(templates[0].table_data, templates[0].y_axis_key);
+    chart = new Chart(templates, 'test0');
+    chart.load({table_data: templates[0].table_data, y_axis_key: templates[0].y_axis_key});
     expect(chart.data).toEqual({
       chart_data: [
-        {'x-axis':'2000','series':'foo','Thousands Sold':'23'},
-        {'x-axis':'2000','series':'bar','Thousands Sold':'45'},
-        {'x-axis':'2001','series':'foo','Thousands Sold':'32'},
-        {'x-axis':'2001','series':'bar','Thousands Sold':'54'}
+        {'x-axis':'2000','series':'foo','y-axis':'23'},
+        {'x-axis':'2000','series':'bar','y-axis':'45'},
+        {'x-axis':'2001','series':'foo','y-axis':'32'},
+        {'x-axis':'2001','series':'bar','y-axis':'54'}
       ],
       x_axis_key: 'x-axis',
       y_axis_key: 'y-axis'
@@ -74,11 +75,12 @@ describe('The Chart model', function() {
   });
 
   it('renders correctly', function(){
+    chart = new Chart(templates, 'test0');
     chart.data = {
-      chart_data: 'chart_data',
+      chart_data: [0,1,2,3],
       x_axis_key: 'x_axis_key',
       y_axis_key: 'y_axis_key'
     };
-    expect(chart.render(0)).toEqual('chartable-UUID chart_data x_axis_key y_axis_key');
+    expect(chart.render(0)).toEqual('chartable-UUID [0,1,2,3] x_axis_key y_axis_key');
   });
 });

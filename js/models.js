@@ -42,8 +42,9 @@ function Chart(templates, chosen) {
         x_axis_key: self.data.x_axis_key,
         y_axis_key: self.data.y_axis_key
       };
-    
-    return $.render(self.templates.read(num).html, template_vars);
+
+    var rendered = $.render(self.templates.read(num).html, template_vars);
+    return rendered;
   };
 
   // self.init();
