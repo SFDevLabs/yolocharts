@@ -3,42 +3,71 @@
 
 var utilities = {
 
-  Oroborus: function(array, index) {
+  Loop: function(array, index) {
     var self = this;
-    // What index is the Oroborus at?
+    // What index is the Loop at?
     self.index = index;
     self.array = array;
     
-    // Oroborus.walk() accepts a positive or negative integer and increments and decrements the index accordingly.
+    // Loop.walk() accepts a positive or negative integer and increments and decrements the index accordingly.
     // The incrementing and decrementing wrap around, so that the array is circular.
     // It returns the element of `array` at the new `index`
-    // If the `skip` arg is true, the `index` is not altered.
-    self.walk = function(num, skip) {
+    // If the `shift` arg is true, the `index` is not altered.
+    self.walk = function(num, shift) {
 
       // Set `temp` counter to keep from altering the `index` if desired
       var temp = self.index;
       // Repeat the absolute number of times
       for (var i = 0; i < Math.abs(num); i++) {
-
+        console.log('walk num, i', num, i)
         // If num is positive, increment each time or go back to zero
-        if (num > 0) self.array[++temp] || self.array[(temp = 0)]; // Sorry, Crockford
+        if (num > 0) self.array[++temp] || self.array[(temp = 0)];
         // If num is negative, decrement each time or go to end of array
         if (num < 0) self.array[--temp] || self.array[(temp = self.array.length - 1)];
       }
 
-      // If `skip` argument is false, change `index`
-      if (!skip) self.index = temp;
+      // If `shift` argument is true, change `index`
+      if (shift) self.index = temp;
       return self.array[temp];
     };
     
     self.move = function (num) {
-      return self.walk(num, false);
+      return self.walk(num, true);
     };
 
     self.read = function (num) {
-      return self.walk(num, true);
+      return self.walk(num, false);
     };
   },
+
+
+  // Loop2: function(array) {
+  //   var self = this;
+  //   self.array = JSON.parse(JSON.stringify(array));
+    
+
+  //   self.walk = function(num, shift) {
+  //     var temp = JSON.parse(JSON.stringify(self.array));
+
+  //     for (var i = 0; i <= Math.abs(num); i++) {
+  //       console.log('walk num, i', num, i);
+
+  //       if (num > 0) temp.push(array.shift());
+  //       if (num < 0) temp.unshift(array.pop());
+  //     }
+
+  //     if (shift) self.array = temp;
+  //     return temp[0];
+  //   };
+    
+  //   self.move = function (num) {
+  //     return self.walk(num, true);
+  //   };
+
+  //   self.read = function (num) {
+  //     return self.walk(num, false);
+  //   };
+  // },
 
 
   // This generates a unique ID. Got it off stackoverflow.
@@ -80,7 +109,7 @@ var utilities = {
         x_axis_key = header.splice(0, 1)[0],
         //init output obj
         output = {
-          data: [],
+          chart_data: [],
           x_axis_key: x_axis_key,
           y_axis_key: y_axis_key
         };
@@ -98,7 +127,7 @@ var utilities = {
         doc.series = value;
         // get the value from the row, and put it in the field corresponding to the units the user has chosen
         doc[y_axis_key] = row[index];
-        output.data.push(doc);
+        output.chart_data.push(doc);
       });
     });
 

@@ -3,7 +3,6 @@
 
 var table,
     chart,
-    chart_types = _.keys(templates),
     hash = window.location.hash;
 
 var trim_hash = hash.slice(1),
@@ -17,7 +16,7 @@ if (!templates[trim_hash]) {
 chosen_template = templates[trim_hash];
 
 table = new Table(chosen_template.data, chosen_template.y_axis_key);
-chart = new Chart(chart_types, trim_hash);
+chart = new Chart(templates, trim_hash);
 chartCarousel($('#js-chart-carousel'), $('#js-embed-box'));
 tableBox($('#js-table-box'));
 

@@ -2,6 +2,7 @@
 /*global $, table, chart, crowbar, console*/
 
 
+
 var tableBox = function($el) {
   $('.js-y-axis-key').on('keyup', function(){
     table.y_axis_key = $(this).val();
@@ -41,49 +42,37 @@ var tableBox = function($el) {
 
 var chartCarousel = function($el) {
   table.on('updated', function(data){
-    console.log('updated', data)
-    // Data must be loaded before any rendering can occur
-    chart.data.table_data = data.table_data;
-    chart.data.y_axis_key = data.y_axis_key;
-    draw();
+    // Data must be loaded into model before any rendering can occur
+    chart.load(data);
+    chart.trigger('dom_init');
   });
 
-  $el.on('click', '.item:nth-child(2)', prepend);
-  $el.on('click', '.item:nth-child(4)', append);
+  $el.on('click', '.item:nth-child(2)', chart.trigger('prepend'));
+  $el.on('click', '.item:nth-child(4)', chart.trigger('append'));
 
-  function render(num) {
-    return chart.render(chart.types.read(num));
-  }
+  //Usually the first draw after page load
+  chart.on('dom_init', function() {
+    $el.children('.item:nth-child(2)').html(chart.render(-1));
+    $el.children('.item:nth-child(3)').html(chart.render(0));
+    $el.children('.item:nth-child(4)').html(chart.render(1));
+    $('.js-embed-box').text(chart.render(0));
+  });
 
-  function draw() {
-    $el.children('.item:nth-child(2)').html(render(-1));
-    $el.children('.item:nth-child(3)').html(render(0));
-    $el.children('.item:nth-child(4)').html(render(1));
-    $('.js-embed-box').text(render(0));
-    console.log('draw done')
-  }
-
-  function prepend() {
-    console.log('prepend')
+  //Moving the carousel right
+  chart.on('prepend', function() {
     $el.prepend($el.children('.item:nth-child(5)').empty());
-    chart.types.move(-1);
-    $el.children('.item:nth-child(2)').html(render(-1));
-    // $el.children('.item:nth-child(3)').html(render(0));
-    // $el.children('.item:nth-child(4)').html(render(1));
-    $('.js-embed-box').text(render(0));
-    chart.trigger('type_change', chart.types.read(0));
-    // window.location.hash = chart.types.read(0);
-  }
+    chart.templates.move(-1);
+    $el.children('.item:nth-child(2)').html(chart.render(-1));
+    $('.js-embed-box').text(chart.render(0));
+    chart.trigger('type_change', chart.templates.read(0));
+  });
 
-  function append() {
-    console.log('append')
+  //Moving the carousel left
+  chart.on('append', function() {
     $el.append($el.children('.item:nth-child(1)').empty());
-    chart.types.move(1);
-    // $el.children('.item:nth-child(2)').html(render(-1));
-    // $el.children('.item:nth-child(3)').html(render(0));
-    $el.children('.item:nth-child(4)').html(render(1));
-    $('.js-embed-box').text(render(0));
-    chart.trigger('type_change', chart.types.read(0));
-    // window.location.hash = chart.types.read(0);
-  }
+    chart.templates.move(1);
+    $el.children('.item:nth-child(4)').html(chart.render(1));
+    $('.js-embed-box').text(chart.render(0));
+    chart.trigger('type_change', chart.templates.read(0));
+  });
 };

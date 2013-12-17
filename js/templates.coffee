@@ -1,9 +1,9 @@
 # View this with html syntax highlighting!
 
-templates =
+templates = [
   
-  simple_line:
-    template:
+    name: 'simple_line'
+    html:
       '''
       <!-- SIMPLE_LINE -->
       <div id="{{ chart_id }}">
@@ -30,6 +30,7 @@ templates =
         </script>
       </div>
       '''
+      
     data: [['Year', 'Maserati', 'Mazda', 'Mercedes', 'Mini', 'Mitsubishi'],
           ['2009', '0', '2941', '4303', '354', '5814'],
           ['2010', '5', '2905', '2867', '412', '5284'],
@@ -38,9 +39,9 @@ templates =
           [null, null, null, null, null, null]]
 
     y_axis_key: 'Thousands Sold'
-
-  simple_bar:
-    template:
+  ,
+    name: 'simple_bar'
+    html:
       '''
       <!-- SIMPLE_BAR -->
       <div id="{{ chart_id }}">
@@ -67,6 +68,7 @@ templates =
         </script>
       </div>
       '''
+
     data: [['Year', 'Maserati', 'Mazda', 'Mercedes', 'Mini', 'Mitsubishi'],
           ['2009', '0', '2941', '4303', '354', '5814'],
           ['2010', '5', '2905', '2867', '412', '5284'],
@@ -75,9 +77,9 @@ templates =
           [null, null, null, null, null, null]]
 
     y_axis_key: 'Thousands Sold'
-
-  simple_area:
-    template:
+  ,
+    name: 'simple_area'
+    html:
       '''
       <!-- SIMPLE_AREA -->
       <div id="{{ chart_id }}">
@@ -113,3 +115,4 @@ templates =
           [null, null, null, null, null, null]]
 
     y_axis_key: 'Thousands Sold'
+]

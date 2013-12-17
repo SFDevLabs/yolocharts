@@ -1,5 +1,5 @@
 'use strict';
-/*global $, utilities, templates, _*/
+/*global $, utilities, _*/
 
 function Table(data, y_axis_key) {
   var self = $.observable(this);
@@ -17,23 +17,34 @@ function Table(data, y_axis_key) {
 }
 
 
-function Chart(types, chosen) {
+function Chart(templates, chosen) {
   var self = $.observable(this),
-      index = _.indexOf(types, chosen);
+      start_index = _.findIndex(templates, {name: chosen});
 
   self.data = {};
-  self.types = new utilities.Oroborus(types, index);
+  self.templates = new utilities.Loop(templates, start_index);
 
-  self.render = function(chart_type) {
-    // Processes the data for d3
-    var conversion = utilities.hotToD3(self.data.table_data, self.data.y_axis_key),
-      template_vars = {
-        chart_data: JSON.stringify(conversion.data),
+  // self.init = function(){
+  //   console.log('start index ', start_index);
+  //   // Start template loop in right place
+  //   self.templates.move(start_index);
+  // };
+
+  self.load = function(data) {
+    // Process the data for d3
+    self.data = utilities.hotToD3(data.table_data, data.y_axis_key);
+  };
+
+  self.render = function(num) {
+    var template_vars = {
+        chart_data: JSON.stringify(self.data.chart_data),
         chart_id: 'chartable-' + utilities.generateUUID(),
-        x_axis_key: conversion.x_axis_key,
-        y_axis_key: conversion.y_axis_key
+        x_axis_key: self.data.x_axis_key,
+        y_axis_key: self.data.y_axis_key
       };
     
-    return $.render(templates[chart_type].template, template_vars);
+    return $.render(self.templates.read(num).html, template_vars);
   };
+
+  // self.init();
 }
