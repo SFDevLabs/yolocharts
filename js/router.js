@@ -23,6 +23,26 @@ chart.on('type_change', function(type) {
   window.location.hash = type;
 });
 
-// $.route(function(hash) {
-//   console.log('ROUTE')
-// });
+
+
+
+// // Instance the tour
+// var tour = new Tour();
+
+// // Add your steps. Not too many, you don't really want to get your users sleepy
+// tour.addSteps([
+//   {
+//     element: '#js-table-box', // string (jQuery selector) - html element next to which the step popover should be shown
+//     title: 'Insert data', // string - title of the popover
+//     placement: 'top',
+//     backdrop: false,
+//     content: 'Put your data here. You can paste from Excel or Google Docs.' // string - content of the popover
+//   }
+// ]);
+
+// // Initialize the tour
+// tour.init();
+
+// // Start the tour
+// tour.start();
+

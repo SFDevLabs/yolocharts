@@ -2,17 +2,30 @@
 <html>
 
   <head>
-    <title>yolocharts</title>
+    <title>Chartable</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./vendor/jquery.handsontable.full.css">
+    <!-- <link rel="stylesheet" href="./vendor/bootstrap-tour.css"> -->
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="./css/style.css">
   </head>
 
   <body>
+    <a href="https://github.com/SFDevLabs/yolocharts"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
     <div class="container text-center">
       <h1 class="page-title">Chartable</h1>
       
-      <hr/>
+      <hr class="invis" />
+
+      <div class="control-menu">
+        <!-- <div class="control-menu-item js-redraw"><i class="fa fa-refresh"></i>&nbsp;&nbsp;Redraw</div> -->
+        <div class="control-menu-item" data-toggle="modal" data-target="#js-embed-modal"><i style="font-weight: bold;" class="fa fa-code">&nbsp;&nbsp;</i>Get embed code</div>
+        <div class="control-menu-item js-save-svg"><i class="fa fa-download"></i>&nbsp;&nbsp;Download SVG</div>
+        <!-- <div class="control-menu-item js-help-tour"><i class="fa fa-question"></i>&nbsp;&nbsp;Help</div> -->
+      </div>
+
+      <hr class="invis" />
       <div id="js-chart-carousel" class="chart-carousel inline-block">
         <div class="item"></div>
         <div class="item"></div>
@@ -20,11 +33,14 @@
         <div class="item"></div>
         <div class="item"></div>
       </div>
-      <hr/>
+
+<!--       <hr class="invis" />
       <button class="js-save-svg btn btn-primary btn-lg">Download svg</button>
       <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#js-embed-modal">Get embed code</button>
-      <hr />
+      <hr class="invis" /> -->
       
+      <hr class="invis" />
+
       <div class="text-left tablebox js-jankytable" id="js-table-box">
         <span class="x-axis-key-label">x-axis</span>
         <div class="hot-table js-table"></div>
@@ -36,7 +52,13 @@
         </form>
       </div>
       
-      <hr/> 
+      <hr class="invis" />
+      <div class="logo-box">
+        <img src="./images/sfdl_logo.png"/>
+        <a href="http://www.sfdevlabs.com">Made by SF Dev Labs</a>
+      </div>
+      <hr class="invis" />
+
     </div>
 
     <!-- Modal -->
@@ -62,6 +84,7 @@
     <script src="./vendor/riot.js"></script>
     <script src="./vendor/js-render.js"></script>
     <script src="./vendor/bootstrap.min.js"></script>
+    <script src="./vendor/bootstrap-tour.min.js"></script>
     <script src="./vendor/crowbar.js"></script>
 
     <script src="./js/templates.js"></script>
