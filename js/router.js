@@ -14,9 +14,7 @@ if (!templates[trim_hash]) {
 
 var chosen_template = _.where(templates, { name: trim_hash })[0];
 
-console.log('chosen_template trim_hash templates: ', chosen_template, trim_hash, templates)
-
-table = new Table(chosen_template.data, chosen_template.y_axis_key);
+table = new Table(chosen_template);
 chart = new Chart(templates, trim_hash);
 chartCarousel($('#js-chart-carousel'), $('#js-embed-box'));
 tableBox($('#js-table-box'));

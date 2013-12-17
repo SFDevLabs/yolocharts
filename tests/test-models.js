@@ -42,14 +42,9 @@ describe('The Chart model', function() {
     }
   ];
 
-  // beforeEach(function() {
-  //   chart = new Chart(templates, 'test1');
-  // });
-
   it('initializes correctly', function(){
     chart = new Chart(templates, 'test1');
     expect(chart.templates.read(0).name).toEqual('test1');
-    console.log('init test', chart.templates)
   });
 
   it('moves and reads correctly', function(){

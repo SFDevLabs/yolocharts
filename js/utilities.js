@@ -19,7 +19,6 @@ var utilities = {
       var temp = self.index;
       // Repeat the absolute number of times
       for (var i = 0; i < Math.abs(num); i++) {
-        console.log('walk num, i', num, i)
         // If num is positive, increment each time or go back to zero
         if (num > 0) self.array[++temp] || self.array[(temp = 0)];
         // If num is negative, decrement each time or go to end of array
@@ -37,7 +36,6 @@ var utilities = {
 
     self.read = function (num) {
       var ret = self.walk(num, false);
-      console.log('read ret', ret)
       return ret;
     };
   },

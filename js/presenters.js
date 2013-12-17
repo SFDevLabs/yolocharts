@@ -5,8 +5,8 @@
 
 var tableBox = function($el) {
   $('.js-y-axis-key').on('keyup', function(){
-    table.y_axis_key = $(this).val();
-    table.trigger('updated', table.read());
+    table.data.y_axis_key = $(this).val();
+    table.trigger('updated');
   });
 
   //Simply calls crowbar.js. Janky hack for now, but works. Need to fix Illustrator bugs
@@ -14,10 +14,10 @@ var tableBox = function($el) {
     crowbar();
   });
 
-  $('.js-y-axis-key').val(table.y_axis_key);
+  $('.js-y-axis-key').val(table.data.y_axis_key);
 
   $('.js-table', $el).handsontable({
-    data: table.data,
+    data: table.data.table_data,
     minCols: 15,
     minSpareCols: 1,
     minSpareRows: 1,
@@ -26,7 +26,7 @@ var tableBox = function($el) {
     contextMenu: true,
     nativeScrollbars: false,
     afterChange: function() {
-      table.trigger('updated', table.read());
+      table.trigger('updated');
       // jankyTable();
     }
   });
@@ -41,14 +41,19 @@ var tableBox = function($el) {
 
 
 var chartCarousel = function($el) {
-  table.on('updated', function(data){
+  table.on('updated', function(){
     // Data must be loaded into model before any rendering can occur
-    chart.load(data);
+    chart.load(table.data);
     chart.trigger('dom_init');
   });
 
-  $el.on('click', '.item:nth-child(2)', chart.trigger('prepend'));
-  $el.on('click', '.item:nth-child(4)', chart.trigger('append'));
+  $el.on('click', '.item:nth-child(2)', function(){
+    chart.trigger('prepend')
+  });
+
+  $el.on('click', '.item:nth-child(4)', function(){
+    chart.trigger('append')
+  });
 
   //Usually the first draw after page load
   chart.on('dom_init', function() {
@@ -63,8 +68,7 @@ var chartCarousel = function($el) {
     $el.prepend($el.children('.item:nth-child(5)').empty());
     chart.templates.move(-1);
     $el.children('.item:nth-child(2)').html(chart.render(-1));
-    $('.js-embed-box').text(chart.render(0));
-    chart.trigger('type_change', chart.templates.read(0));
+    redraw();
   });
 
   //Moving the carousel left
@@ -72,7 +76,12 @@ var chartCarousel = function($el) {
     $el.append($el.children('.item:nth-child(1)').empty());
     chart.templates.move(1);
     $el.children('.item:nth-child(4)').html(chart.render(1));
-    $('.js-embed-box').text(chart.render(0));
-    chart.trigger('type_change', chart.templates.read(0));
+    redraw();
   });
+
+  function redraw(num){
+    $('.js-embed-box').text(chart.render(0));
+    //Broadcasts the new chart type
+    chart.trigger('type_change', chart.templates.read(0).name);
+  }
 };
