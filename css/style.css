@@ -5849,3 +5849,9 @@ hr.invis {
   width: 30px;
   margin-right: 10px;
 }
+.code-box {
+  height: 200px;
+  width: 100%;
+  background: #fff;
+  font-family: monospace;
+}
