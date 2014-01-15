@@ -3,7 +3,7 @@
 
 
 
-var tableBox = function($el) {
+var tableBox = function ($el) {
   $('.js-y-axis-key').on('keyup', function(){
     table.data.y_axis_key = $(this).val();
     table.trigger('updated');
@@ -40,11 +40,11 @@ var tableBox = function($el) {
 
 
 
-var chartCarousel = function($el) {
+var chartCarousel = function ($el) {
   table.on('updated', function(){
     // Data must be loaded into model before any rendering can occur
     chart.load(table.data);
-    chart.trigger('dom_init');
+    chart.trigger('draw');
   });
 
   $el.on('click', '.item:nth-child(2)', function(){
@@ -55,8 +55,7 @@ var chartCarousel = function($el) {
     chart.trigger('append')
   });
 
-  //Usually the first draw after page load
-  chart.on('dom_init', function() {
+  chart.on('draw', function() {
     $el.children('.item:nth-child(2)').html(chart.render(-1));
     $el.children('.item:nth-child(3)').html(chart.render(0));
     $el.children('.item:nth-child(4)').html(chart.render(1));
@@ -84,4 +83,15 @@ var chartCarousel = function($el) {
     //Broadcasts the new chart type
     chart.trigger('type_change', chart.templates.read(0).name);
   }
+};
+
+
+
+var chartBox = function ($el, $embed) {
+  table.on('updated', function(){
+    // Data must be loaded into model before any rendering can occur
+    chart.load(table.data);
+    $el.html(chart.render(0));
+    $embed.text(chart.render(0));
+  });
 };
