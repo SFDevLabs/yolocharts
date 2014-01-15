@@ -5713,6 +5713,13 @@ hr.invis {
 .inline-block {
   display: inline-block;
 }
+.chart-box {
+  padding: 10px;
+  background: #fff;
+  max-width: 960px;
+  width: 100%;
+  height: 400px;
+}
 .chart-carousel {
   position: relative;
   margin-left: auto;
