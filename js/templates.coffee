@@ -130,10 +130,10 @@ templates = [
         <script>
           (function(){
             var color = d3.scale.category20c(); 
-            var w = (400);
-            var h = w;
-            var padding = 70;
-            var radius = (w / 2);
+            var h = (350);
+            var padding = 50;
+            var w = h + padding * 2;
+            var radius = (h / 2);
             var outerRadius = radius - padding;
             var innerRadius = outerRadius / 2
 
@@ -164,7 +164,7 @@ templates = [
               .attr("height", h);
 
             var group = svg.append('g')
-              .attr("transform", "translate(" + radius + "," + radius + ")");
+              .attr("transform", "translate(" + (radius + padding) + "," + radius + ")");
 
             // Create arc groups
             var arcs = group.selectAll(".arc") 
