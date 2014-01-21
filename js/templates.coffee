@@ -123,87 +123,124 @@ templates = [
       <div id="{{ chart_id }}">
         <script src="http://d3js.org/d3.v3.min.js"></script>
         <script src="http://dimplejs.org/dist/dimple.v1.1.2.min.js"></script>
+        <form>
+          <label><input type="radio" name="dataset" value="apples" checked> Apples</label>
+          <label><input type="radio" name="dataset" value="oranges"> Oranges</label>
+        </form>
         <script>
           (function(){
-            var canvasWidth = 300, //width
-                canvasHeight = 300,   //height
-                outerRadius = 100,   //radius
-                color = d3.scale.category20c(); //builtin range of colors
+            var color = d3.scale.category20c(); 
+            var w = (400);
+            var h = w;
+            var padding = 70;
+            var radius = (w / 2);
+            var outerRadius = radius - padding;
+            var innerRadius = outerRadius / 2
 
-            var dataSet = {{ chart_data }};
+            var dataset = {{ chart_data }};
 
             var nested = d3.nest()
-                .key(function(d) { return d["{{ x_axis_key }}"]; })
-                .entries(dataSet);
+              .key(function(d) { return d["{{ x_axis_key }}"]; })
+              .entries(dataset);
 
             console.log(nested[0].values)
 
-            var vis = d3.select("#" + "{{ chart_id }}")
-              .append("svg:svg") //create the SVG element inside the <body>
-                .data([nested[0].values]) //associate our data with the document
-                .attr("width", canvasWidth) //set the width of the canvas
-                .attr("height", canvasHeight) //set the height of the canvas
-                .append("svg:g") //make a group to hold our pie chart
-                  .attr("transform", "translate(" + 1.5*outerRadius + "," + 1.5*outerRadius + ")") // relocate center of pie to "outerRadius,outerRadius"
-
-            // This will create <path> elements for us using arc data...
             var arc = d3.svg.arc()
+              .innerRadius(innerRadius) 
               .outerRadius(outerRadius);
+              
+            var pie = d3.layout.pie()
+              .value(function(d) { 
+                console.log('pie d', d);
+                return d["{{ y_axis_key }}"] 
+              })
+              .sort( null );;
 
-            var pie = d3.layout.pie() //this will create arc data for us given a list of values
-              .value(function(d) { return d["{{ y_axis_key }}"]; }) // Binding each value to the pie
-              .sort(function(d) { return null; } );
 
-            // Select all <g> elements with class slice (there aren"t any yet)
-            var arcs = vis.selectAll("g.slice")
-              // Associate the generated pie data (an array of arcs, each having startAngle,
-              // endAngle and value properties) 
-              .data(pie)
-              // This will create <g> elements for every "extra" data element that should be associated
-              // with a selection. The result is creating a <g> for every object in the data array
+            // create svg for donut
+            var svg = d3.select("#{{ chart_id }}")  
+              .append("svg")
+              .attr("width", w)
+              .attr("height", h);
+
+            var group = svg.append('g')
+              .attr("transform", "translate(" + radius + "," + radius + ")");
+
+            // Create arc groups
+            var arcs = group.selectAll(".arc") 
+              .data(pie(nested[0].values)) 
               .enter()
-              // Create a group to hold each slice (we will have a <path> and a <text>
-              // element associated with each slice)
-              .append("svg:g")
-              .attr("class", "slice");    //allow us to style things in the slices (like text)
+              .append("g")
+              .attr("class", "arc");
+              // .each(function(d) { this._current = d; });
 
-            arcs.append("svg:path")
-              //set the color for each slice to be chosen from the color function defined above
-              .attr("fill", function(d, i) { return color(i); } )
-              //this creates the actual SVG path using the associated data (pie) with the arc drawing function
-              .attr("d", arc);
+            // Draw arc paths
+            var paths = arcs.append("path")
+              .attr("d", arc)
+              .attr("fill", function(d, i) { return color(i); })
 
-            // Add a legendLabel to each arc slice...
-            arcs.append("svg:text")
-              .attr("transform", function(d) { //set the label"s origin to the center of the arc
-                //we have to make sure to set these before calling arc.centroid
-                d.outerRadius = outerRadius + 50; // Set Outer Coordinate
-                d.innerRadius = outerRadius + 45; // Set Inner Coordinate
-                return "translate(" + arc.centroid(d) + ")";
+
+            // Switch and transition x-axis value
+            d3.selectAll("input")
+              .on("change", change);
+
+            function change() {
+              console.log(this)
+              // var value = this.value;
+              pie.value(function(d) { d["{{ y_axis_key }}"]; }); // change the value function
+              arcs = arcs.data(pie)
+              // .enter()
+              
+              paths.attr("d", arc)
+              // arcs.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+            }
+
+
+            // function change() {
+            //     // var jobs_counts = getRandomCounts();
+            //     // var jobs_colors = ["green", "yellow", "red", "blue", "cyan"];    
+            //     arcs = arcs.data(pie(nested[1].values))
+            //       .attr("fill", function(d, i) { return color(i); })
+
+            //     arcs.transition().duration(500).attrTween("d", function(a) {
+            //       console.log('transition this', this)
+            //       var i = d3.interpolate(this._current, a);
+            //     this._current = i(0);
+            //     return function(t) {
+            //       return arc
+            //         .innerRadius(innerRadius) 
+            //         .outerRadius(outerRadius);
+            //      };
+            //     });                                            
+            // }
+
+
+            // Make group to hold labels
+            var labels = arcs.append("g")
+              .attr("transform", function(d) {
+                var c = arc.centroid(d);
+                return "translate(" + c[0]*1.8 +"," + c[1]*1.6 + ")";
               })
-              .attr("text-anchor", "middle") //center the text on it"s origin
-              .style("fill", "Purple")
-              .style("font", "bold 12px Arial")
-              .text(function(d, i) { return dataSet[i].series; }); //get the label from our original data array
 
-            // Add a magnitude value to the larger arcs, translated to the arc centroid and rotated.
-            arcs.filter(function(d) { return d.endAngle - d.startAngle > .2; }).append("svg:text")
-              .attr("dy", ".35em")
+            labels.append("text") // First line
+              .text(function(d) { return d.data.series; })
               .attr("text-anchor", "middle")
-              .attr("transform", function(d) { //set the label"s origin to the center of the arc
-                //we have to make sure to set these before calling arc.centroid
-                d.outerRadius = outerRadius; // Set Outer Coordinate
-                d.innerRadius = outerRadius / 2; // Set Inner Coordinate
-                return "translate(" + arc.centroid(d) + ")";
-              })
-              .style("fill", "White")
-              .style("font", "bold 12px Arial")
-              .text(function(d) { return d.data["{{ y_axis_key }}"]; });
 
-            // Computes the angle of an arc, converting from radians to degrees.
-            function angle(d) {
-              var a = (d.startAngle + d.endAngle) * 90 / Math.PI - 90;
-              return a > 90 ? a - 180 : a;
+            labels.append("text") // Second line
+              .text(function(d) { return d.data["{{ y_axis_key }}"]; })
+              .attr("dy", "1em")
+              .attr("text-anchor", "middle")
+
+            // Store the displayed angles in _current.
+            // Then, interpolate from _current to the new angles.
+            // During the transition, _current is updated in-place by d3.interpolate.
+            function arcTween(a) {
+              console.log('arctween this, a', this, a)
+              var i = d3.interpolate(this._current, a);
+              this._current = i(0);
+              return function (t) {
+                return arc(i(t));
+              };
             }
 
           })();

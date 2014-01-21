@@ -41,35 +41,6 @@ var utilities = {
   },
 
 
-  // Loop2: function(array) {
-  //   var self = this;
-  //   self.array = JSON.parse(JSON.stringify(array));
-    
-
-  //   self.walk = function(num, shift) {
-  //     var temp = JSON.parse(JSON.stringify(self.array));
-
-  //     for (var i = 0; i <= Math.abs(num); i++) {
-  //       console.log('walk num, i', num, i);
-
-  //       if (num > 0) temp.push(array.shift());
-  //       if (num < 0) temp.unshift(array.pop());
-  //     }
-
-  //     if (shift) self.array = temp;
-  //     return temp[0];
-  //   };
-    
-  //   self.move = function (num) {
-  //     return self.walk(num, true);
-  //   };
-
-  //   self.read = function (num) {
-  //     return self.walk(num, false);
-  //   };
-  // },
-
-
   // This generates a unique ID. Got it off stackoverflow.
   generateUUID: function() {
       var d = new Date().getTime();
