@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  position: relative;
+  width: 960px;
+}
+
+text {
+  font: 10px sans-serif;
+}
+
+form {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+</style>
+<form>
+  <label><input type="radio" name="dataset" value="0" checked>2009</label>
+  <label><input type="radio" name="dataset" value="1">2010</label>
+  <label><input type="radio" name="dataset" value="2">2011</label>
+  <label><input type="radio" name="dataset" value="3">2012</label>
+</form>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+// [
+//   {"apples":53245,"oranges":200},
+//   {"apples":28479,"oranges":200},
+//   {"apples":19697,"oranges":200},
+//   {"apples":24037,"oranges":200},
+//   {"apples":40245,"oranges":200}
+// ];
+
+var width = 960,
+    height = 500,
+    radius = Math.min(width, height) / 2,
+    data = [
+      {"Year":"2009", "series":"Maserati", "Thousands Sold":"0"},
+      {"Year":"2009", "series":"Mazda", "Thousands Sold":"2941"},
+      {"Year":"2009", "series":"Mercedes", "Thousands Sold":"4303"},
+      {"Year":"2009", "series":"Mini", "Thousands Sold":"354"},
+      {"Year":"2009", "series":"Mitsubishi", "Thousands Sold":"5814"},
+      {"Year":"2010", "series":"Maserati", "Thousands Sold":"5"},
+      {"Year":"2010", "series":"Mazda", "Thousands Sold":"2905"},
+      {"Year":"2010", "series":"Mercedes", "Thousands Sold":"2867"},
+      {"Year":"2010", "series":"Mini", "Thousands Sold":"412"},
+      {"Year":"2010", "series":"Mitsubishi", "Thousands Sold":"5284"},
+      {"Year":"2011", "series":"Maserati", "Thousands Sold":"4"},
+      {"Year":"2011", "series":"Mazda", "Thousands Sold":"2517"},
+      {"Year":"2011", "series":"Mercedes", "Thousands Sold":"4822"},
+      {"Year":"2011", "series":"Mini", "Thousands Sold":"552"},
+      {"Year":"2011", "series":"Mitsubishi", "Thousands Sold":"6127"},
+      {"Year":"2012", "series":"Maserati", "Thousands Sold":"2"},
+      {"Year":"2012", "series":"Mazda", "Thousands Sold":"2422"},
+      {"Year":"2012", "series":"Mercedes", "Thousands Sold":"5399"},
+      {"Year":"2012", "series":"Mini", "Thousands Sold":"776"},
+      {"Year":"2012", "series":"Mitsubishi", "Thousands Sold":"4151"}
+    ];
+
+var nested = d3.nest()
+  .key(function(d) { return d["Year"]; })
+  .entries(data);
+
+console.log(nested)
+
+var color = d3.scale.category20();
+
+var pie = d3.layout.pie()
+    .value(function(d) { 
+      console.log("pie d", d)
+      return d["Thousands Sold"]; })
+    .sort(null);
+
+var arc = d3.svg.arc()
+    .innerRadius(radius - 100)
+    .outerRadius(radius - 20);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+var path = svg.datum(nested[0].values).selectAll("path")
+    .data(pie)
+  .enter().append("path")
+    .attr("fill", function(d, i) { return color(i); })
+    .attr("d", arc)
+    .each(function(d) { this._current = d; }); // store the initial angles
+
+d3.selectAll("input")
+    .on("change", change);
+
+  //var timeout = setTimeout(function() {
+  //d3.select("input[value=\"oranges\"]").property("checked", true).each(change);
+  //}, 2000);
+
+// Make group to hold labels
+var labels = path.append("g")
+  // .attr("transform", function(d) {
+  //   var c = arc.centroid(d);
+  //   return "translate(" + c[0]*1.8 +"," + c[1]*1.6 + ")";
+  // })
+  .append("text") // First line
+  .text("herple")
+  .attr("text-anchor", "middle")
+
+// labels
+
+// labels.append("text") // Second line
+//   .text(function(d) { return d.data["{{ y_axis_key }}"]; })
+//   .attr("dy", "1em")
+//   .attr("text-anchor", "middle")
+
+
+function change() {
+  var value = this.value;
+  //clearTimeout(timeout);
+  // pie.value(function(d) { return d[value]; }); // change the value function
+  path = svg.datum(nested[value].values).selectAll("path").data(pie); // compute the new angles
+  path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+}
+
+
+function type(d) {
+  d.apples = +d.apples;
+  d.oranges = +d.oranges;
+  return d;
+}
+
+// Store the displayed angles in _current.
+// Then, interpolate from _current to the new angles.
+// During the transition, _current is updated in-place by d3.interpolate.
+function arcTween(a) {
+  var i = d3.interpolate(this._current, a);
+  this._current = i(0);
+  return function(t) {
+    return arc(i(t));
+  };
+}
+
+</script>

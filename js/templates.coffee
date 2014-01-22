@@ -124,8 +124,8 @@ templates = [
         <script src="http://d3js.org/d3.v3.min.js"></script>
         <script src="http://dimplejs.org/dist/dimple.v1.1.2.min.js"></script>
         <form>
-          <label><input type="radio" name="dataset" value="apples" checked> Apples</label>
-          <label><input type="radio" name="dataset" value="oranges"> Oranges</label>
+          <label><input type="radio" name="dataset" value="0" checked> Apples</label>
+          <label><input type="radio" name="dataset" value="1"> Oranges</label>
         </form>
         <script>
           (function(){
@@ -139,6 +139,9 @@ templates = [
 
             var dataset = {{ chart_data }};
 
+            console.log(dataset)
+            console.log(JSON.stringify(dataset))
+
             var nested = d3.nest()
               .key(function(d) { return d["{{ x_axis_key }}"]; })
               .entries(dataset);
@@ -151,24 +154,25 @@ templates = [
               
             var pie = d3.layout.pie()
               .value(function(d) { 
-                console.log('pie d', d);
-                return d["{{ y_axis_key }}"] 
-              })
-              .sort( null );;
+                console.log('the d', d)
+                return d["{{ y_axis_key }}"] })
+              .sort(null);;
 
 
             // create svg for donut
-            var svg = d3.select("#{{ chart_id }}")  
-              .append("svg")
+            var svg = d3.select("#{{ chart_id }}").append("svg")
               .attr("width", w)
-              .attr("height", h);
+              .attr("height", h)
+              .append("g")
+                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
             var group = svg.append('g')
               .attr("transform", "translate(" + (radius + padding) + "," + radius + ")");
 
+
             // Create arc groups
-            var arcs = group.selectAll(".arc") 
-              .data(pie(nested[0].values)) 
+            var arcs = group.datum(nested[0].values).selectAll(".arc") 
+              .data(pie) 
               .enter()
               .append("g")
               .attr("class", "arc");
@@ -185,14 +189,8 @@ templates = [
               .on("change", change);
 
             function change() {
-              console.log(this)
-              // var value = this.value;
-              pie.value(function(d) { d["{{ y_axis_key }}"]; }); // change the value function
-              arcs = arcs.data(pie)
-              // .enter()
-              
-              paths.attr("d", arc)
-              // arcs.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+              group.datum(nested[1].values).selectAll(".arc")
+                .data(pie)
             }
 
 
