@@ -23,6 +23,9 @@ text {
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 
+"use strict";
+/*global d3*/
+
 var width = 400,
     height = 400,
     radius = Math.min(width, height) / 2,
@@ -53,7 +56,7 @@ var nested = d3.nest()
   .key(function(d) { return d["Year"]; })
   .entries(data);
 
-var color = d3.scale.category20();
+var color = d3.scale.category20c();
 
 var pie = d3.layout.pie()
     .value(function(d) { return d["Thousands Sold"]; })
@@ -63,41 +66,52 @@ var arc = d3.svg.arc()
     .innerRadius(radius - 100)
     .outerRadius(radius - 20);
 
+// Make pie chart svg
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height)
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+// Make group to hold slice path and label
 var slice_group = svg.datum(nested[0].values).selectAll("path")
-    .data(pie)
+  .data(pie)
   .enter()
-    .append("g")
+    .append("g");
 
+// This is the actual slice path
 var slice_path = slice_group.append("path")
-    .attr("fill", function(d, i) { return color(i); })
-    .attr("d", arc)
-    .each(function(d) { this._current = d; }) // store the initial angles
+  .attr("fill", function(d, i) { return color(i); })
+  .attr("d", arc)
+  .each(function(d) { this._current = d; }); // store the initial angles
 
 // Make group to hold labels
 var label_group = slice_group.append("g")
   .attr("transform", function(d) {
-    console.log(d)
     var c = arc.centroid(d);
-    return "translate(" + c[0] +"," + c[1] + ")";
-  })
+    return "translate(" + c[0] * 1.5 +"," + c[1] * 1.5 + ")";
+  });
 
 var line_1 = label_group.append("text") // First line
   .text(function(d) { return d.data.series; })
-  .attr("text-anchor", "middle")
+  .attr("text-anchor", "middle");
 
 var line_2 = label_group.append("text") // Second line
   .text(function(d) { return d.data["Thousands Sold"]; })
   .attr("dy", "1em")
-  .attr("text-anchor", "middle")
+  .attr("text-anchor", "middle");
 
+// Make dataset selector
+var selector = d3.select("body").append("form").selectAll("label")
+  .data(nested)
+  .enter()
+    .append("label")
+    .html(function (d, i) {
+      var checked = (i = 0) ? "checked" : "";
+      return "<input type='radio' name='dataset' value='" + i + "'" + checked + ">" + d.key;
+    });
 
-//Switch data
+// Switch data
 d3.selectAll("input")
   .on("change", change);
 
@@ -112,14 +126,14 @@ function change() {
     .transition().duration(750)
     .attr("transform", function(d) {
       var c = arc.centroid(d);
-      return "translate(" + c[0] +"," + c[1] + ")";
-    })
+      return "translate(" + c[0] * 1.5 +"," + c[1] * 1.5 + ")";
+    });
 
   line_1.data(pie)
-    .text(function(d) { return d.data["series"]; })
+    .text(function(d) { return d.data["series"]; });
 
   line_2.data(pie)
-    .text(function(d) { return d.data["Thousands Sold"]; })
+    .text(function(d) { return d.data["Thousands Sold"]; });
 
 
 }
