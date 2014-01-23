@@ -87,9 +87,12 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-var path = svg.datum(nested[0].values).selectAll("path")
+var slice_group = svg.datum(nested[0].values).selectAll("path")
     .data(pie)
-  .enter().append("path")
+  .enter()
+  .append("g")
+
+var slice_path = slice_group.append("path")
     .attr("fill", function(d, i) { return color(i); })
     .attr("d", arc)
     .each(function(d) { this._current = d; }); // store the initial angles
@@ -97,26 +100,22 @@ var path = svg.datum(nested[0].values).selectAll("path")
 d3.selectAll("input")
     .on("change", change);
 
-  //var timeout = setTimeout(function() {
-  //d3.select("input[value=\"oranges\"]").property("checked", true).each(change);
-  //}, 2000);
-
 // Make group to hold labels
-var labels = path.append("g")
-  // .attr("transform", function(d) {
-  //   var c = arc.centroid(d);
-  //   return "translate(" + c[0]*1.8 +"," + c[1]*1.6 + ")";
-  // })
-  .append("text") // First line
-  .text("herple")
+var labels = slice_group.append("g")
+  .attr("transform", function(d) {
+    console.log(d)
+    var c = arc.centroid(d);
+    return "translate(" + c[0]*1.8 +"," + c[1]*1.6 + ")";
+  })
+
+labels.append("text") // First line
+  .text(function(d) { return d.data.series; })
   .attr("text-anchor", "middle")
 
-// labels
-
-// labels.append("text") // Second line
-//   .text(function(d) { return d.data["{{ y_axis_key }}"]; })
-//   .attr("dy", "1em")
-//   .attr("text-anchor", "middle")
+labels.append("text") // Second line
+  .text(function(d) { return d.data["Thousands Sold"]; })
+  .attr("dy", "1em")
+  .attr("text-anchor", "middle")
 
 
 function change() {
@@ -125,6 +124,7 @@ function change() {
   // pie.value(function(d) { return d[value]; }); // change the value function
   path = svg.datum(nested[value].values).selectAll("path").data(pie); // compute the new angles
   path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+  label = svg.datum(nested[value].values).selectAll("text").data(pie)
 }
 
 
