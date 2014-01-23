@@ -13,12 +13,6 @@ text {
   font: 10px sans-serif;
 }
 
-form {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
 </style>
 <form>
   <label><input type="radio" name="dataset" value="0" checked>2009</label>
@@ -29,16 +23,8 @@ form {
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 
-// [
-//   {"apples":53245,"oranges":200},
-//   {"apples":28479,"oranges":200},
-//   {"apples":19697,"oranges":200},
-//   {"apples":24037,"oranges":200},
-//   {"apples":40245,"oranges":200}
-// ];
-
-var width = 960,
-    height = 500,
+var width = 400,
+    height = 400,
     radius = Math.min(width, height) / 2,
     data = [
       {"Year":"2009", "series":"Maserati", "Thousands Sold":"0"},
@@ -67,14 +53,10 @@ var nested = d3.nest()
   .key(function(d) { return d["Year"]; })
   .entries(data);
 
-console.log(nested)
-
 var color = d3.scale.category20();
 
 var pie = d3.layout.pie()
-    .value(function(d) { 
-      console.log("pie d", d)
-      return d["Thousands Sold"]; })
+    .value(function(d) { return d["Thousands Sold"]; })
     .sort(null);
 
 var arc = d3.svg.arc()
@@ -90,48 +72,56 @@ var svg = d3.select("body").append("svg")
 var slice_group = svg.datum(nested[0].values).selectAll("path")
     .data(pie)
   .enter()
-  .append("g")
+    .append("g")
 
 var slice_path = slice_group.append("path")
     .attr("fill", function(d, i) { return color(i); })
     .attr("d", arc)
-    .each(function(d) { this._current = d; }); // store the initial angles
-
-d3.selectAll("input")
-    .on("change", change);
+    .each(function(d) { this._current = d; }) // store the initial angles
 
 // Make group to hold labels
-var labels = slice_group.append("g")
+var label_group = slice_group.append("g")
   .attr("transform", function(d) {
     console.log(d)
     var c = arc.centroid(d);
-    return "translate(" + c[0]*1.8 +"," + c[1]*1.6 + ")";
+    return "translate(" + c[0] +"," + c[1] + ")";
   })
 
-labels.append("text") // First line
+var line_1 = label_group.append("text") // First line
   .text(function(d) { return d.data.series; })
   .attr("text-anchor", "middle")
 
-labels.append("text") // Second line
+var line_2 = label_group.append("text") // Second line
   .text(function(d) { return d.data["Thousands Sold"]; })
   .attr("dy", "1em")
   .attr("text-anchor", "middle")
 
 
+//Switch data
+d3.selectAll("input")
+  .on("change", change);
+
 function change() {
   var value = this.value;
-  //clearTimeout(timeout);
-  // pie.value(function(d) { return d[value]; }); // change the value function
-  path = svg.datum(nested[value].values).selectAll("path").data(pie); // compute the new angles
-  path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
-  label = svg.datum(nested[value].values).selectAll("text").data(pie)
-}
+  svg.datum(nested[value].values);
+
+  slice_path.data(pie) // compute the new angles
+    .transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+
+  label_group.data(pie)
+    .transition().duration(750)
+    .attr("transform", function(d) {
+      var c = arc.centroid(d);
+      return "translate(" + c[0] +"," + c[1] + ")";
+    })
+
+  line_1.data(pie)
+    .text(function(d) { return d.data["series"]; })
+
+  line_2.data(pie)
+    .text(function(d) { return d.data["Thousands Sold"]; })
 
 
-function type(d) {
-  d.apples = +d.apples;
-  d.oranges = +d.oranges;
-  return d;
 }
 
 // Store the displayed angles in _current.
